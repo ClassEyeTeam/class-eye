@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: discovery-service
+  boot:
+    admin:
+      client:
+        url: http://localhost:8070
+server:
+  port: 8761
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
