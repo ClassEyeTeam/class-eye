@@ -22,14 +22,24 @@ pipeline {
                 sh 'mvn package'
             }
         }
+        stage('Docker Build') {
+            steps {
+                sh 'docker-compose build'
+            }
+        }
+        stage('Docker Deploy') {
+            steps {
+                sh 'docker-compose up -d'
+            }
+        }
     }
 
     post {
         success {
-            echo 'Build and Test succeeded!'
+            echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Build or Test failed!'
+            echo 'Pipeline failed!'
         }
     }
 }
