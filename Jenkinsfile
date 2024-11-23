@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/MohammedSadok/ClassEye'
+                git 'https://github.com/MohammedSadok/class-eye',
+                branch: 'main'
             }
         }
         stage('Build') {
