@@ -3,7 +3,7 @@ package com.classeye.studentservice.entity;
 /**
  * @author moham
  **/
-public enum PresenceStatus {
+public enum AttendanceStatus  {
     PRESENT,
     ABSENT,
     RETARD

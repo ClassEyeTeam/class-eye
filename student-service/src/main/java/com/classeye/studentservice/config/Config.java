@@ -1,4 +1,4 @@
-package com.classeye.universityservice.config;
+package com.classeye.studentservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

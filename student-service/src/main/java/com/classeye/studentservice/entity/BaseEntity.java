@@ -1,4 +1,4 @@
-package com.classeye.universityservice.entity;
+package com.classeye.studentservice.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

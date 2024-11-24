@@ -1,4 +1,4 @@
-package com.classeye.classservice.exception;
+package com.classeye.studentservice.exception;
 
 /**
  * @author sejja

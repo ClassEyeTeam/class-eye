@@ -1,4 +1,4 @@
-package com.classeye.universityservice.dto;
+package com.classeye.studentservice.dto;
 
 import java.time.LocalDateTime;
 

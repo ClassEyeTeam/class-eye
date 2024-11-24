@@ -1,6 +1,7 @@
-package com.classeye.classservice.exception;
+package com.classeye.studentservice.exception;
 
-import com.classeye.universityservice.dto.ApiError;
+
+import com.classeye.studentservice.dto.ApiError;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
