@@ -25,6 +25,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     List<Attendance> findByStatusAndStudentId(AttendanceStatus status, Long id);
 
     // Find attendance records for a specific student and session
-    List<Attendance> findByStudent_IdAndSession_Id(Long studentId, Long sessionId);
+    Attendance findByStudent_IdAndSession_Id(Long studentId, Long sessionId);
 }
 

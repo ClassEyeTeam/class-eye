@@ -21,6 +21,8 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  profiles:
+    active: test
 server:
   port: 8081
 

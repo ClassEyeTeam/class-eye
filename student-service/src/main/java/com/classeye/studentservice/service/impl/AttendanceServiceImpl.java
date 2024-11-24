@@ -9,15 +9,20 @@ import com.classeye.studentservice.repository.AttendanceRepository;
 import com.classeye.studentservice.service.AttendanceService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
 @Service
+@Transactional
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
@@ -51,9 +56,11 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public void deleteAttendance(Long id) {
         log.info("Deleting attendance with ID: {}", id);
-        Attendance attendance = attendanceRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Attendance not found with ID: " + id));
-        attendanceRepository.delete(attendance);
+        if (!attendanceRepository.existsById(id)) {
+            log.error("Attendance with ID {} not found", id);
+            throw new EntityNotFoundException("Attendance not found with ID: " + id);
+        }
+        attendanceRepository.deleteById(id);
         log.info("Attendance deleted with ID: {}", id);
     }
 
@@ -73,7 +80,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public List<AttendanceResponseDTO> findByStatusAndStudentId(AttendanceStatus status, Long studentId) {
         log.info("Fetching attendances with status {} for student ID: {}", status, studentId);
@@ -83,11 +89,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<AttendanceResponseDTO> findByStudentIdAndSessionId(Long studentId, Long sessionId) {
+    public AttendanceResponseDTO findByStudentIdAndSessionId(Long studentId, Long sessionId) {
         log.info("Fetching attendances for student ID: {} and session ID: {}", studentId, sessionId);
-        return attendanceRepository.findByStudent_IdAndSession_Id(studentId, sessionId).stream()
-                .map(attendanceMapper::toDto)
-                .collect(Collectors.toList());
+        Attendance attendance = attendanceRepository.findByStudent_IdAndSession_Id(studentId, sessionId);
+        return attendanceMapper.toDto(attendance);
     }
 }
-

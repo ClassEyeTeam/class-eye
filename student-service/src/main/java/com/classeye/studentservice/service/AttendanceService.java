@@ -22,6 +22,6 @@ public interface AttendanceService {
     List<AttendanceResponseDTO> findByStudentId(Long studentId);
     List<AttendanceResponseDTO> findBySessionId(Long sessionId);
     List<AttendanceResponseDTO> findByStatusAndStudentId(AttendanceStatus status, Long studentId);
-    List<AttendanceResponseDTO> findByStudentIdAndSessionId(Long studentId, Long sessionId);
+    AttendanceResponseDTO findByStudentIdAndSessionId(Long studentId, Long sessionId);
 }
 

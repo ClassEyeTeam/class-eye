@@ -16,6 +16,8 @@ public interface StudentMapper {
     StudentMapper INSTANCE = Mappers.getMapper(StudentMapper.class);
 
     Student toEntity(StudentRequestDTO studentRequestDTO);
+
+    @Mapping(target = "attendanceResponseDTO", ignore = true)
     StudentResponseDTO toDto(Student student);
 }
 
