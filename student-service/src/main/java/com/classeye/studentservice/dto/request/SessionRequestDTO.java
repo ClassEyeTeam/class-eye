@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public record SessionRequestDTO(
         @NotNull(message = "Option ID cannot be null")
-        Long optionId,
+        Long moduleOptionId,
 
         @NotNull(message = "Start date and time cannot be null")
         LocalDateTime startDateTime,
