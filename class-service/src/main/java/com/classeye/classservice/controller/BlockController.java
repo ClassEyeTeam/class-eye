@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/blocks")
 @AllArgsConstructor
-public class BlockContoller {
+public class BlockController {
     private final BlockService blockService;
 
     // Create a new block
