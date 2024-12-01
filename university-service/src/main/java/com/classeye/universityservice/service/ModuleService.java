@@ -14,5 +14,6 @@ public interface ModuleService {
     void deleteModule(Long id);
     ModuleDTO getModuleDtoById(Long id);
     Module getModuleById(Long id);
+
     List<ModuleDTO> getAllModules();
 }

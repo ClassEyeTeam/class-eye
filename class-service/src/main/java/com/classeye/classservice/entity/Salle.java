@@ -16,8 +16,8 @@ public class Salle extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom;
-    private int capacite;
+    private String name;
+    private int capacity;
     private SalleType salleType;
     @ManyToOne
     private Block block;
