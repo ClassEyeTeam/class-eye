@@ -8,6 +8,7 @@ package com.classeye.studentservice.service.impl;
 import com.classeye.studentservice.dto.request.SessionRequestDTO;
 import com.classeye.studentservice.dto.response.SessionResponseDTO;
 import com.classeye.studentservice.entity.Session;
+import com.classeye.studentservice.feign.ModuleOptionFeignClient;
 import com.classeye.studentservice.mapper.SessionMapper;
 import com.classeye.studentservice.repository.SessionRepository;
 import com.classeye.studentservice.service.SessionService;
@@ -29,14 +30,12 @@ public class SessionServiceImpl implements SessionService {
 
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
+    private final ModuleOptionFeignClient moduleOptionFeignClient ;
 
     @Override
     public SessionResponseDTO saveSession(SessionRequestDTO sessionRequestDTO) {
-        log.info("Saving session with module option ID: {}", sessionRequestDTO.optionId());
-//        if (sessionRepository.findByModuleOptionId(sessionRequestDTO.getModuleOptionId()).isPresent()) {
-//            log.error("Session with module option ID {} already exists", sessionRequestDTO.getModuleOptionId());
-//            throw new DuplicateResourceException("Session with module option ID " + sessionRequestDTO.getModuleOptionId() + " already exists!");
-//        }
+        log.info("Saving session with module option ID: {}", sessionRequestDTO.moduleOptionId());
+        validateModuleOption(sessionRequestDTO.moduleOptionId());
         Session session = sessionMapper.toEntity(sessionRequestDTO);
         Session savedSession = sessionRepository.save(session);
         log.info("Session saved with ID: {}", savedSession.getId());
@@ -51,7 +50,9 @@ public class SessionServiceImpl implements SessionService {
                     log.error("Session with ID {} not found", id);
                     return new EntityNotFoundException("Session not found with ID: " + id);
                 });
-        existingSession.setModuleOptionId(sessionRequestDTO.optionId());
+        validateModuleOption(sessionRequestDTO.moduleOptionId());
+
+        existingSession.setModuleOptionId(sessionRequestDTO.moduleOptionId());
         existingSession.setStartDateTime(sessionRequestDTO.startDateTime());
         existingSession.setEndDateTime(sessionRequestDTO.endDateTime());
         // Update other fields as needed
@@ -92,5 +93,14 @@ public class SessionServiceImpl implements SessionService {
         return sessionRepository.findByAttendances_Student_Id(studentId).stream()
                 .map(sessionMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+
+    private void validateModuleOption(Long optionId) {
+        try{
+            moduleOptionFeignClient.getModuleOptionById(optionId);
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Module option not found with ID: " + optionId);
+        }
     }
 }

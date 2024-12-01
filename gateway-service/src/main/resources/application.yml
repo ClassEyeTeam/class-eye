@@ -9,3 +9,11 @@ eureka:
       defaultZone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
 server:
   port: 8088
+logging:
+  level:
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: DEBUG
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway, routes
