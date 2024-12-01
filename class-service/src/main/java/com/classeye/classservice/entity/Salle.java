@@ -16,7 +16,7 @@ public class Salle extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String name; // may be the room number
     private int capacity;
     private SalleType salleType;
     @ManyToOne
