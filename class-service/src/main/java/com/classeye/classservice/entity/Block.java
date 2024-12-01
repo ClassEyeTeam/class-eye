@@ -21,10 +21,12 @@ public class Block extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+
+    @Column(nullable = false, unique = true)
     private String name;
+
     private String description;
-    private int floor;
     private int roomCount; // nombre de salles
-    @OneToMany(mappedBy = "block")
+    @OneToMany(mappedBy = "block" ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Salle> salles;
 }
