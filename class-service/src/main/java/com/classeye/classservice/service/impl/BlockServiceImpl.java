@@ -46,7 +46,6 @@ public class BlockServiceImpl  implements BlockService {
                 .orElseThrow(() -> new IllegalStateException("Block not found"));
         block.setName(blockDTO.name());
         block.setDescription(blockDTO.description());
-        block.setFloor(blockDTO.floor());
         block.setRoomCount(blockDTO.roomCount());
        // block.setSalles(blockDTO.salles());
         Block updatedBlock = blockRepository.save(block);
