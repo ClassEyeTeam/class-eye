@@ -13,7 +13,7 @@ public record BlockDTO( Long id,
                         String name,
                         String description,
                         int roomCount,
-                        List<SalleDTO> salles
+                       List<SalleDTO> salles
                         )
 {
 
