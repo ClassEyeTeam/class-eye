@@ -1,1 +1,1 @@
-# class-eye
+# class-eyes: 2
