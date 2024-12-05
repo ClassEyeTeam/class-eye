@@ -12,6 +12,5 @@ public record BlockResponseDTO(Long id,
                                 String description,
                                 int roomCount,
                                List<SalleDTO> salles
-
 ) {
 }
