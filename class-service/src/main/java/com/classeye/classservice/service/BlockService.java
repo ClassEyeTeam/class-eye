@@ -17,5 +17,5 @@ public interface BlockService {
     List<BlockDTO> getAllBlocks();
 
     // Getting all the salles in a block
-    List<String> getBlockSalles(Long id);
+    List<SalleDTO> getBlockSalles(Long id);
 }

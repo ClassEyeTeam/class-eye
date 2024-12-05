@@ -1,6 +1,7 @@
 package com.classeye.classservice.controller;
 
 import com.classeye.classservice.dto.BlockDTO;
+import com.classeye.classservice.dto.SalleDTO;
 import com.classeye.classservice.entity.Block;
 import com.classeye.classservice.service.BlockService;
 import jakarta.validation.Valid;
@@ -58,8 +59,8 @@ public class BlockController {
     }
 
     // Get a list of all salles in a block
-    public ResponseEntity<List<String>> getBlockSalles(@PathVariable long id){
-        List<String> salles = blockService.getBlockSalles(id);
+    public ResponseEntity<List<SalleDTO>> getBlockSalles(@PathVariable long id){
+        List<SalleDTO> salles = blockService.getBlockSalles(id);
         return ResponseEntity.ok(salles);
     }
 }

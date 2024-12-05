@@ -1,9 +1,11 @@
 package com.classeye.classservice.service.impl;
 
 import com.classeye.classservice.dto.BlockDTO;
+import com.classeye.classservice.dto.SalleDTO;
 import com.classeye.classservice.entity.Block;
 import com.classeye.classservice.entity.Salle;
 import com.classeye.classservice.mapper.BlockMapper;
+import com.classeye.classservice.mapper.SalleMapper;
 import com.classeye.classservice.repository.BlockRepository;
 import com.classeye.classservice.service.BlockService;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,7 @@ public class BlockServiceImpl  implements BlockService {
 
     private final BlockRepository blockRepository;
     private final BlockMapper blockMapper;
+    private final SalleMapper salleMapper;
 
     // Implementation of the createBlock method
     @Override
@@ -79,13 +82,13 @@ public class BlockServiceImpl  implements BlockService {
 
     // Implementation of the getBlockSalles method
     @Override
-    public List<String> getBlockSalles(Long id ){
+    public List<SalleDTO> getBlockSalles(Long id ){
         Block block = blockRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException(("Block not found")));
 
         List<Salle> salles = block.getSalles();
         return salles.stream()
-                .map(Salle::getName)
+                .map(salleMapper::toSalleDTO)
                 .toList();
     }
 
