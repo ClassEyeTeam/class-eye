@@ -8,6 +8,7 @@ import com.classeye.classservice.repository.BlockRepository;
 import com.classeye.classservice.service.BlockService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class BlockServiceImpl  implements BlockService {
         block.setName(blockDTO.name());
         block.setDescription(blockDTO.description());
         block.setRoomCount(blockDTO.roomCount());
-       // block.setSalles(blockDTO.salles());
+       //block.setSalles(blockDTO.salles());
         Block updatedBlock = blockRepository.save(block);
         return blockMapper.toBlockDTO(updatedBlock);
     }
@@ -73,6 +74,18 @@ public class BlockServiceImpl  implements BlockService {
     public List<BlockDTO> getAllBlocks(){
         return blockRepository.findAll().stream() // stream() is a method that converts the list into a Stream wich means that we can apply operations on it
                 .map(blockMapper::toBlockDTO)
+                .toList();
+    }
+
+    // Implementation of the getBlockSalles method
+    @Override
+    public List<String> getBlockSalles(Long id ){
+        Block block = blockRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException(("Block not found")));
+
+        List<Salle> salles = block.getSalles();
+        return salles.stream()
+                .map(Salle::getName)
                 .toList();
     }
 
