@@ -6,6 +6,7 @@ import com.classeye.classservice.service.BlockService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,5 +55,11 @@ public class BlockController {
     public ResponseEntity<List<BlockDTO>> getAllBlocks(){
         List<BlockDTO> blocks = blockService.getAllBlocks();
         return ResponseEntity.ok(blocks);
+    }
+
+    // Get a list of all salles in a block
+    public ResponseEntity<List<String>> getBlockSalles(@PathVariable long id){
+        List<String> salles = blockService.getBlockSalles(id);
+        return ResponseEntity.ok(salles);
     }
 }
