@@ -2,12 +2,10 @@ package com.classeye.classservice.controller;
 
 import com.classeye.classservice.dto.BlockDTO;
 import com.classeye.classservice.dto.SalleDTO;
-import com.classeye.classservice.entity.Block;
 import com.classeye.classservice.service.BlockService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -6,7 +6,6 @@ import com.classeye.classservice.mapper.SalleMapper;
 import com.classeye.classservice.repository.SalleRepository;
 import com.classeye.classservice.service.SalleService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

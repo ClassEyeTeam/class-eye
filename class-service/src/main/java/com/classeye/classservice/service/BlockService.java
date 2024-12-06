@@ -2,7 +2,6 @@ package com.classeye.classservice.service;
 
 import com.classeye.classservice.dto.BlockDTO;
 import com.classeye.classservice.dto.SalleDTO;
-import com.classeye.classservice.entity.Block;
 
 import java.util.List;
 

@@ -1,10 +1,8 @@
 package com.classeye.classservice.dto.request;
 
-import com.classeye.classservice.dto.BlockDTO;
 import com.classeye.classservice.entity.SalleType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 /**

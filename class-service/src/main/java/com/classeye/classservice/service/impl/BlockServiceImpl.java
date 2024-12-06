@@ -10,7 +10,6 @@ import com.classeye.classservice.repository.BlockRepository;
 import com.classeye.classservice.service.BlockService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

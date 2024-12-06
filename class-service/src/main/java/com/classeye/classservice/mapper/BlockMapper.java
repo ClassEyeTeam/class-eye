@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface BlockMapper {
+
     BlockDTO toBlockDTO(Block block);
-    Block toBlock(BlockDTO blockDTO);
+
+    Block toBlock(BlockDTO blockD);
 }
