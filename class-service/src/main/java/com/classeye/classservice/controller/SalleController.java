@@ -1,6 +1,8 @@
 package com.classeye.classservice.controller;
 
-import com.classeye.classservice.dto.SalleDTO;
+
+import com.classeye.classservice.dto.request.SalleCreateDTO;
+import com.classeye.classservice.dto.response.SalleResponseDTO;
 import com.classeye.classservice.service.SalleService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,15 +23,15 @@ public class SalleController {
 
     // Create a new salle
     @PostMapping
-    public ResponseEntity<SalleDTO> createSalle(@Valid @RequestBody SalleDTO salleDTO) {
-        SalleDTO createdSalle = salleService.createSalle(salleDTO);
+    public ResponseEntity<SalleResponseDTO> createSalle(@Valid @RequestBody SalleCreateDTO salleCreateDTO) {
+        SalleResponseDTO createdSalle = salleService.createSalle(salleCreateDTO);
         return new ResponseEntity<>(createdSalle, HttpStatus.CREATED);
     }
 
     // Update an existing salle
     @PutMapping("/{id}")
-    public ResponseEntity<SalleDTO> updateSalle(@PathVariable long id, @RequestBody @Valid SalleDTO salleDTO) {
-        SalleDTO updatedSalle = salleService.updateSalle(salleDTO, id);
+    public ResponseEntity<SalleResponseDTO> updateSalle(@PathVariable long id, @RequestBody @Valid SalleCreateDTO salleCreateDTO) {
+        SalleResponseDTO updatedSalle = salleService.updateSalle(salleCreateDTO, id);
         return ResponseEntity.ok(updatedSalle);
     }
 
@@ -42,15 +44,15 @@ public class SalleController {
 
     // Get a salle by ID
     @GetMapping("/{id}")
-    public ResponseEntity<SalleDTO> getSalleById(@PathVariable long id) {
-        SalleDTO salleDTO = salleService.getSalle(id);
+    public ResponseEntity<SalleResponseDTO> getSalleById(@PathVariable long id) {
+        SalleResponseDTO salleDTO = salleService.getSalle(id);
         return ResponseEntity.ok(salleDTO);
     }
 
     // Get a list of all salles
     @GetMapping
-    public ResponseEntity<List<SalleDTO>> getAllSalles() {
-        List<SalleDTO> salles = salleService.getAllSalles();
+    public ResponseEntity<List<SalleResponseDTO>> getAllSalles() {
+        List<SalleResponseDTO> salles = salleService.getAllSalles();
         return ResponseEntity.ok(salles);
     }
 
