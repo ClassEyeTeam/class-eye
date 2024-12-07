@@ -1,6 +1,8 @@
 package com.classeye.classservice.mapper;
 
 import com.classeye.classservice.dto.BlockDTO;
+import com.classeye.classservice.dto.request.BlockCreateDTO;
+import com.classeye.classservice.dto.response.BlockResponseDTO;
 import com.classeye.classservice.entity.Block;
 import org.mapstruct.Mapper;
 
@@ -9,8 +11,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface BlockMapper {
-
-    BlockDTO toBlockDTO(Block block);
-
-    Block toBlock(BlockDTO blockD);
+    BlockResponseDTO toBlockDTO(Block block);
+    Block toBlock(BlockCreateDTO blockCreateDTO);
 }
