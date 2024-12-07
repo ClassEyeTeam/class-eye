@@ -13,5 +13,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface SalleMapper {
     SalleResponseDTO toSalleDTO(Salle salle);
-    Salle toSalle(SalleCreateDTO salleDTO);
+    Salle toSalle(SalleCreateDTO salleCreateDTO);
 }
