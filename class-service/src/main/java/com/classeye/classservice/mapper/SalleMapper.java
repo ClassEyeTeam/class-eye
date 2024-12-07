@@ -1,6 +1,9 @@
 package com.classeye.classservice.mapper;
 
-import com.classeye.classservice.dto.SalleDTO;
+
+
+import com.classeye.classservice.dto.request.SalleCreateDTO;
+import com.classeye.classservice.dto.response.SalleResponseDTO;
 import com.classeye.classservice.entity.Salle;
 import org.mapstruct.Mapper;
 
@@ -9,6 +12,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface SalleMapper {
-    SalleDTO toSalleDTO(Salle salle);
-    Salle toSalle(SalleDTO salleDTO);
+    SalleResponseDTO toSalleDTO(Salle salle);
+    Salle toSalle(SalleCreateDTO salleDTO);
 }
