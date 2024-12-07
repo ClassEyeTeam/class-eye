@@ -2,6 +2,9 @@ package com.classeye.classservice.controller;
 
 import com.classeye.classservice.dto.BlockDTO;
 import com.classeye.classservice.dto.SalleDTO;
+import com.classeye.classservice.dto.request.BlockCreateDTO;
+import com.classeye.classservice.dto.response.BlockResponseDTO;
+import com.classeye.classservice.dto.response.SalleResponseDTO;
 import com.classeye.classservice.service.BlockService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,15 +26,15 @@ public class BlockController {
 
     // Create a new block
     @PostMapping
-    public ResponseEntity<BlockDTO> createBlock(@Valid @RequestBody BlockDTO blockDTO) {
-        BlockDTO createdBlock = blockService.createBlock(blockDTO);
+    public ResponseEntity<BlockResponseDTO> createBlock(@Valid @RequestBody BlockCreateDTO blockCreateDTO) {
+        BlockResponseDTO createdBlock = blockService.createBlock(blockCreateDTO);
         return new ResponseEntity<>(createdBlock, HttpStatus.CREATED);
     }
 
     // Update an existing block
     @PutMapping("/{id}")
-    public ResponseEntity<BlockDTO> updateBlock(@PathVariable long id, @RequestBody @Valid BlockDTO blockDTO){
-        BlockDTO updatedBlock = blockService.updateBlock(blockDTO, id);
+    public ResponseEntity<BlockResponseDTO> updateBlock(@PathVariable long id, @RequestBody @Valid BlockCreateDTO blockCreateDTO){
+        BlockResponseDTO updatedBlock = blockService.updateBlock(blockCreateDTO, id);
         return ResponseEntity.ok(updatedBlock);
     }
 
@@ -44,21 +47,21 @@ public class BlockController {
 
     // Get a block by ID
     @GetMapping("/{id}")
-    public ResponseEntity<BlockDTO> getBlockById(@PathVariable long id){
-        BlockDTO blockDTO = blockService.getBlock(id);
+    public ResponseEntity<BlockResponseDTO> getBlockById(@PathVariable long id){
+        BlockResponseDTO blockDTO = blockService.getBlock(id);
         return ResponseEntity.ok(blockDTO);
     }
 
     // Get a list of all blocks
     @GetMapping
-    public ResponseEntity<List<BlockDTO>> getAllBlocks(){
-        List<BlockDTO> blocks = blockService.getAllBlocks();
+    public ResponseEntity<List<BlockResponseDTO>> getAllBlocks(){
+        List<BlockResponseDTO> blocks = blockService.getAllBlocks();
         return ResponseEntity.ok(blocks);
     }
 
     // Get a list of all salles in a block
-    public ResponseEntity<List<SalleDTO>> getBlockSalles(@PathVariable long id){
-        List<SalleDTO> salles = blockService.getBlockSalles(id);
+    public ResponseEntity<List<SalleResponseDTO>> getBlockSalles(@PathVariable long id){
+        List<SalleResponseDTO> salles = blockService.getBlockSalles(id);
         return ResponseEntity.ok(salles);
     }
 }
