@@ -1,6 +1,7 @@
 package com.classeye.classservice.service;
 
-import com.classeye.classservice.dto.SalleDTO;
+import com.classeye.classservice.dto.request.SalleCreateDTO;
+import com.classeye.classservice.dto.response.SalleResponseDTO;
 
 import java.util.List;
 
@@ -8,9 +9,9 @@ import java.util.List;
  * @author Najat
  */
 public interface SalleService {
-    SalleDTO createSalle(SalleDTO salleDTO);
-    SalleDTO updateSalle(SalleDTO salleDTO, Long id);
-    SalleDTO getSalle(Long id);
+    SalleResponseDTO createSalle(SalleCreateDTO salleCreateDTO);
+    SalleResponseDTO updateSalle(SalleCreateDTO salleCreateDTO, Long id);
+    SalleResponseDTO getSalle(Long id);
     void deleteSalle(Long id);
-    List<SalleDTO> getAllSalles();
+    List<SalleResponseDTO> getAllSalles();
 }
