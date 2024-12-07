@@ -2,6 +2,9 @@ package com.classeye.classservice.service.impl;
 
 import com.classeye.classservice.dto.BlockDTO;
 import com.classeye.classservice.dto.SalleDTO;
+import com.classeye.classservice.dto.request.BlockCreateDTO;
+import com.classeye.classservice.dto.response.BlockResponseDTO;
+import com.classeye.classservice.dto.response.SalleResponseDTO;
 import com.classeye.classservice.entity.Block;
 import com.classeye.classservice.entity.Salle;
 import com.classeye.classservice.mapper.BlockMapper;
@@ -28,15 +31,15 @@ public class BlockServiceImpl  implements BlockService {
 
     // Implementation of the createBlock method
     @Override
-    public BlockDTO createBlock(BlockDTO blockDTO){
+    public BlockResponseDTO createBlock(BlockCreateDTO blockCreateDTO){
 
         //verifier si le block exist deja
-        blockRepository.findByName(blockDTO.name())
+        blockRepository.findByName(blockCreateDTO.name())
                 .ifPresent(block -> {
                     throw new IllegalStateException("Block already exists");
                 });
 
-        Block block = blockMapper.toBlock(blockDTO);
+        Block block = blockMapper.toBlock(blockCreateDTO);
         Block savedBlock = blockRepository.save(block);
 
         return blockMapper.toBlockDTO(savedBlock);
@@ -44,13 +47,13 @@ public class BlockServiceImpl  implements BlockService {
 
     // Implementation of the updateBlock method
     @Override
-    public BlockDTO updateBlock(BlockDTO blockDTO, Long id){
+    public BlockResponseDTO updateBlock(BlockCreateDTO blockCreateDTO, Long id){
         Block block= blockRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Block not found"));
-        block.setName(blockDTO.name());
-        block.setDescription(blockDTO.description());
-        block.setRoomCount(blockDTO.roomCount());
-       //block.setSalles(blockDTO.salles());
+        block.setName(blockCreateDTO.name());
+        block.setDescription(blockCreateDTO.description());
+        block.setRoomCount(blockCreateDTO.roomCount());
+       //block.setSalles(blockCreateDTO.salles());
         Block updatedBlock = blockRepository.save(block);
         return blockMapper.toBlockDTO(updatedBlock);
     }
@@ -65,7 +68,7 @@ public class BlockServiceImpl  implements BlockService {
 
     // Implementation of the getBlock method
     @Override
-    public BlockDTO getBlock(Long id){
+    public BlockResponseDTO getBlock(Long id){
         Block block = blockRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException(("Block not found")));
         return blockMapper.toBlockDTO(block);
@@ -73,7 +76,7 @@ public class BlockServiceImpl  implements BlockService {
 
     // Implementation of the getAllBlocks method
     @Override
-    public List<BlockDTO> getAllBlocks(){
+    public List<BlockResponseDTO> getAllBlocks(){
         return blockRepository.findAll().stream() // stream() is a method that converts the list into a Stream wich means that we can apply operations on it
                 .map(blockMapper::toBlockDTO)
                 .toList();
@@ -81,7 +84,7 @@ public class BlockServiceImpl  implements BlockService {
 
     // Implementation of the getBlockSalles method
     @Override
-    public List<SalleDTO> getBlockSalles(Long id ){
+    public List<SalleResponseDTO> getBlockSalles(Long id ){
         Block block = blockRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException(("Block not found")));
 
