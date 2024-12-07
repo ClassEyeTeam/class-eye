@@ -1,6 +1,8 @@
 package com.classeye.classservice.service.impl;
 
-import com.classeye.classservice.dto.SalleDTO;
+
+import com.classeye.classservice.dto.request.SalleCreateDTO;
+import com.classeye.classservice.dto.response.SalleResponseDTO;
 import com.classeye.classservice.entity.Salle;
 import com.classeye.classservice.mapper.SalleMapper;
 import com.classeye.classservice.repository.SalleRepository;
@@ -24,34 +26,34 @@ public class SalleServiceImpl implements SalleService {
 
 
     @Override
-    public SalleDTO createSalle(SalleDTO salleDTO) {
-        log.info("Creating salle: {}", salleDTO);
+    public SalleResponseDTO createSalle(SalleCreateDTO salleCreateDTO) {
+        log.info("Creating salle: {}", salleCreateDTO);
 
-        salleRepository.findByName(salleDTO.name())
+        salleRepository.findByName(salleCreateDTO.name())
                 .ifPresent(salle -> {
                     throw new IllegalStateException("Salle already exists");
                 });
 
-        Salle salle = salleMapper.toSalle(salleDTO);
+        Salle salle = salleMapper.toSalle(salleCreateDTO);
         Salle savedSalle = salleRepository.save(salle);
         log.info("Salle created: {}", savedSalle);
         return salleMapper.toSalleDTO(savedSalle);
     }
 
     @Override
-    public SalleDTO updateSalle(SalleDTO salleDTO, Long id) {
+    public SalleResponseDTO updateSalle(SalleCreateDTO salleCreateDTO, Long id) {
         Salle salle = salleRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Salle not found"));
-        salle.setName(salleDTO.name());
-        salle.setCapacity(salleDTO.capacity());
-        salle.setSalleType(salleDTO.salleType());
-        //salle.setBlock(salleDTO.block());
+        salle.setName(salleCreateDTO.name());
+        salle.setCapacity(salleCreateDTO.capacity());
+        salle.setSalleType(salleCreateDTO.salleType());
+       //salle.setBlock(salleCreateDTO.block());
         Salle updatedSalle = salleRepository.save(salle);
         return salleMapper.toSalleDTO(updatedSalle);
     }
 
     @Override
-    public SalleDTO getSalle(Long id) {
+    public SalleResponseDTO getSalle(Long id) {
         Salle salle = salleRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Salle not found"));
         return salleMapper.toSalleDTO(salle);
@@ -67,7 +69,7 @@ public class SalleServiceImpl implements SalleService {
 
     @Override
     public
-    List<SalleDTO> getAllSalles() {
+    List<SalleResponseDTO> getAllSalles() {
         return salleRepository.findAll().stream()
                 .map(salleMapper::toSalleDTO)
                 .toList();
