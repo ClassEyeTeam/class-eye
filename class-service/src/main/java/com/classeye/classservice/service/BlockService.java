@@ -2,6 +2,9 @@ package com.classeye.classservice.service;
 
 import com.classeye.classservice.dto.BlockDTO;
 import com.classeye.classservice.dto.SalleDTO;
+import com.classeye.classservice.dto.request.BlockCreateDTO;
+import com.classeye.classservice.dto.response.BlockResponseDTO;
+import com.classeye.classservice.dto.response.SalleResponseDTO;
 
 import java.util.List;
 
@@ -9,12 +12,12 @@ import java.util.List;
  * @author Najat
  */
 public interface BlockService {
-    BlockDTO createBlock(BlockDTO blockDTO);
-    BlockDTO updateBlock(BlockDTO blockDTO, Long id);
+    BlockResponseDTO createBlock(BlockCreateDTO blockCreateDTO);
+    BlockResponseDTO updateBlock(BlockCreateDTO blockCreateDTO, Long id);
     void deleteBlock(Long id);
-    BlockDTO getBlock(Long id);
-    List<BlockDTO> getAllBlocks();
+    BlockResponseDTO getBlock(Long id);
+    List<BlockResponseDTO> getAllBlocks();
 
     // Getting all the salles in a block
-    List<SalleDTO> getBlockSalles(Long id);
+    List<SalleResponseDTO> getBlockSalles(Long id);
 }
