@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_vought
+    environment:
+      POSTGRES_DB: vought
+      POSTGRES_USER: vought_user
+      POSTGRES_PASSWORD: P@ssword123-
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - vought_network
+
+volumes:
+  postgres_data:
+networks:
+  vought_network:
