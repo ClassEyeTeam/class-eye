@@ -55,6 +55,9 @@ public class GlobalExceptionHandler {
         );
     }
 
+
+
+
     @ExceptionHandler({JpaSystemException.class, DataIntegrityViolationException.class, ConstraintViolationException.class})
     public ResponseEntity<ApiError> handleJpaExceptions(Exception ex, WebRequest request) {
         String message = "Database error: " + ex.getMessage();

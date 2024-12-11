@@ -15,14 +15,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Salle extends BaseEntity {
+public class Room extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name; // may be the room number
     private int capacity;
-    private SalleType salleType;
+    @Enumerated(EnumType.STRING)
+    private RoomType roomType;
     @ManyToOne
     private Block block;
-
 }

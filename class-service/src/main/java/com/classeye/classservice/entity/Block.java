@@ -26,8 +26,7 @@ public class Block extends BaseEntity{
     private String name;
 
     private String description;
-    private int roomCount; // nombre de salles
 
     @OneToMany(mappedBy = "block" ,cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Salle> salles;
+    private List<Room> rooms;
 }
