@@ -1,5 +1,6 @@
 package com.classeye.universityservice.dto.response;
 
+import com.classeye.universityservice.dto.DepartmentDto;
 import com.classeye.universityservice.dto.ModuleDTO;
 
 import java.util.List;
@@ -11,8 +12,8 @@ public record OptionModulesDTO(
         Long id,
         String name,
         String description,
-        List<ModuleDTO> modules
-
+        List<ModuleDTO> modules,
+        DepartmentDto departmentDto
 
 ) {
 }

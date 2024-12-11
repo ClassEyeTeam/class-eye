@@ -3,6 +3,9 @@ package com.classeye.universityservice.service.impl;
 import com.classeye.universityservice.dto.request.ModuleOptionRequestDTO;
 import com.classeye.universityservice.dto.response.ModuleOptionResponseDTO;
 import com.classeye.universityservice.entity.ModuleOption;
+import com.classeye.universityservice.entity.Module;
+import com.classeye.universityservice.entity.Option;
+import com.classeye.universityservice.entity.Teacher;
 import com.classeye.universityservice.mapper.ModuleOptionMapper;
 import com.classeye.universityservice.repository.ModuleOptionRepository;
 import com.classeye.universityservice.service.ModuleOptionService;
@@ -41,14 +44,17 @@ public class ModuleOptionServiceImpl implements ModuleOptionService {
                 moduleOptionRequestDTO.optionId());
 
         // Validate related entities
-        moduleService.getModuleById(moduleOptionRequestDTO.moduleId());
-        teacherService.getTeacherById(moduleOptionRequestDTO.teacherId());
-        optionService.getOptionById(moduleOptionRequestDTO.optionId());
+        Module module = moduleService.getModuleById(moduleOptionRequestDTO.moduleId());
+        Teacher teacher = teacherService.getTeacherById(moduleOptionRequestDTO.teacherId());
+        Option option = optionService.getOptionById(moduleOptionRequestDTO.optionId());
 
         // Save entity
         ModuleOption moduleOption = moduleOptionMapper.toEntity(moduleOptionRequestDTO);
+        moduleOption.setModule(module);
+        moduleOption.setOption(option);
+        moduleOption.setTeacher(teacher);
         ModuleOption savedModuleOption = moduleOptionRepository.save(moduleOption);
-
+        
         log.info("ModuleOption created with ID: {}", savedModuleOption.getId());
         return moduleOptionMapper.toDto(savedModuleOption);
     }

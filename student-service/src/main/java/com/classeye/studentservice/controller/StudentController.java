@@ -69,4 +69,10 @@ public class StudentController {
         List<StudentResponseDTO> students = studentService.findBySessionId(sessionId);
         return ResponseEntity.ok(students);
     }
+
+    @GetMapping("/option/{optionId}")
+    public ResponseEntity<List<StudentResponseDTO>> getStudentsByOptionId(@PathVariable Long optionId) {
+        List<StudentResponseDTO> students = studentService.findByOptionId(optionId);
+        return ResponseEntity.ok(students);
+    }
 }
