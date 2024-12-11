@@ -1,35 +1,62 @@
 pipeline {
     agent any
 
+    environment {
+        SERVICES = 'admin-server discovery-service gateway-service config-service university-service'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/MohammedSadok/class-eye',
-                branch: 'main'
+                git(
+                    url: 'https://github.com/ClassEyeTeam/class-eye',
+                    branch: 'main'
+                )
             }
         }
-        stage('Build') {
+        stage('Build Services') {
             steps {
-                sh 'mvn clean install'
+                script {
+                    def services = SERVICES.split(' ')
+                    for (service in services) {
+                        dir("${service}") {
+                            echo "Building ${service}..."
+                            sh 'mvn clean install'
+                        }
+                    }
+                }
             }
         }
-        stage('Test') {
+        stage('Test Services') {
             steps {
-                sh 'mvn test'
+                script {
+                    def services = SERVICES.split(' ')
+                    for (service in services) {
+                        dir("${service}") {
+                            echo "Testing ${service}..."
+                            sh 'mvn test'
+                        }
+                    }
+                }
             }
         }
-        stage('Package') {
+        stage('Package Services') {
             steps {
-                sh 'mvn package'
+                script {
+                    def services = SERVICES.split(' ')
+                    for (service in services) {
+                        dir("${service}") {
+                            echo "Packaging ${service}..."
+                            sh 'mvn package'
+                        }
+                    }
+                }
             }
         }
-        stage('Docker Build') {
+        stage('Docker Build and Deploy') {
             steps {
+                echo "Building and deploying all services using Docker Compose..."
                 sh 'docker-compose build'
-            }
-        }
-        stage('Docker Deploy') {
-            steps {
                 sh 'docker-compose up -d'
             }
         }

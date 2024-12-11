@@ -12,6 +12,7 @@ public record StudentResponseDTO(
         String firstName,
         String lastName,
         String email,
+        Long optionId,
         AttendanceResponseDTO attendanceResponseDTO
 ) {
 }

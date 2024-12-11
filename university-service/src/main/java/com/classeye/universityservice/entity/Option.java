@@ -25,7 +25,7 @@ public class Option extends BaseEntity {
     private String description;
 
     // Many Options can belong to one Department
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department department;
 

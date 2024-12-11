@@ -20,4 +20,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     // Find students who attended a specific session
     List<Student> findByAttendances_Session_Id(Long sessionId);
+    List<Student> findByOptionId(Long optionId);
 }

@@ -3,6 +3,17 @@ spring:
     name: gateway-service
   config:
     import: optional:configserver:${CONFIG_SERVICE_URL:http://localhost:8888}
+  cloud:
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+
 eureka:
   client:
     service-url:

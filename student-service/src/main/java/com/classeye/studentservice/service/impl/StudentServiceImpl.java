@@ -58,7 +58,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
-
     @Override
     public StudentResponseDTO updateStudent(Long id, StudentRequestDTO studentRequestDTO) {
         log.info("Updating student with ID: {}", id);
@@ -131,26 +130,42 @@ public class StudentServiceImpl implements StudentService {
                             student.getFirstName(),
                             student.getLastName(),
                             student.getEmail(),
+                            student.getOptionId(),
                             attendanceResponseDTO
                     );
                 })
                 .collect(Collectors.toList());
     }
 
-
+    @Override
+    public List<StudentResponseDTO> findByOptionId(Long optionId) {
+        log.info("Fetching students for option ID: {}", optionId);
+        return studentRepository.findByOptionId(optionId).stream()
+                .map((student) -> {
+                    return new StudentResponseDTO(
+                            student.getId(),
+                            student.getFirstName(),
+                            student.getLastName(),
+                            student.getEmail(),
+                            student.getOptionId(),
+                            null
+                    );
+                })
+                .collect(Collectors.toList());
+    }
 
 
     private void validateOption(Long optionId) {
-        try{
+        try {
 
 
-            if(!optionFeignClient.getOptionById(optionId).isPresent()){
+            if (!optionFeignClient.getOptionById(optionId).isPresent()) {
                 log.error("Option with ID {} not found", optionId);
                 throw new EntityNotFoundException("Option not found with ID: " + optionId);
-            }}
-        catch(Exception e){
+            }
+        } catch (Exception e) {
             log.error("Option with ID {} not found", optionId);
-            throw new EntityNotFoundException("Option not found with ID: " +optionId);
+            throw new EntityNotFoundException("Option not found with ID: " + optionId);
         }
     }
 }
