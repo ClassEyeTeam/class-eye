@@ -17,7 +17,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
+  profiles:
+    active: test
 #  h2:
 #    console:
 #      enabled: true
