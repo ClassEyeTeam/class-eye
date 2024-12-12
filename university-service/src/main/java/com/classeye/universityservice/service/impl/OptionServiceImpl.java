@@ -6,6 +6,7 @@ import com.classeye.universityservice.dto.response.OptionResponseDto;
 import com.classeye.universityservice.entity.Department;
 import com.classeye.universityservice.entity.Option;
 import com.classeye.universityservice.exception.DuplicateResourceException;
+import com.classeye.universityservice.mapper.DepartmentMapper;
 import com.classeye.universityservice.mapper.OptionMapper;
 import com.classeye.universityservice.repository.OptionRepository;
 import com.classeye.universityservice.service.DepartmentService;
@@ -29,6 +30,7 @@ public class OptionServiceImpl implements OptionService {
 
     private final OptionRepository optionRepository;
     private final DepartmentService departmentService;
+    private final DepartmentMapper departmentMapper;
     private final OptionMapper optionMapper;
 
     @Override
@@ -38,8 +40,9 @@ public class OptionServiceImpl implements OptionService {
             log.error("Option with name '{}' already exists", optionDTO.name());
             throw new DuplicateResourceException("Option already exists with name: " + optionDTO.name());
         }
-        DepartmentDto departmentDto = departmentService.getDepartmentDtoById(optionDTO.departmentId());
+        Department department = departmentService.getDepartmentById(optionDTO.departmentId());
         Option option = optionMapper.toEntity(optionDTO);
+        option.setDepartment(department);
         Option savedOption = optionRepository.save(option);
 
         log.info("Option created with ID: {}", savedOption.getId());
@@ -47,7 +50,7 @@ public class OptionServiceImpl implements OptionService {
                 savedOption.getId(),
                 savedOption.getName(),
                 savedOption.getDescription(),
-                departmentDto
+                departmentMapper.ToDto(department)
         );
     }
 
