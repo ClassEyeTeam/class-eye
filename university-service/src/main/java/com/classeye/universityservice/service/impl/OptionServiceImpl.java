@@ -6,6 +6,7 @@ import com.classeye.universityservice.dto.response.OptionResponseDto;
 import com.classeye.universityservice.entity.Department;
 import com.classeye.universityservice.entity.Option;
 import com.classeye.universityservice.exception.DuplicateResourceException;
+import com.classeye.universityservice.feign.RoomFeignClient;
 import com.classeye.universityservice.mapper.DepartmentMapper;
 import com.classeye.universityservice.mapper.OptionMapper;
 import com.classeye.universityservice.repository.OptionRepository;
@@ -32,6 +33,7 @@ public class OptionServiceImpl implements OptionService {
     private final DepartmentService departmentService;
     private final DepartmentMapper departmentMapper;
     private final OptionMapper optionMapper;
+    private final RoomFeignClient roomFeignClient;
 
     @Override
     public OptionResponseDto createOption(OptionDTO optionDTO) {
@@ -43,6 +45,7 @@ public class OptionServiceImpl implements OptionService {
         Department department = departmentService.getDepartmentById(optionDTO.departmentId());
         Option option = optionMapper.toEntity(optionDTO);
         option.setDepartment(department);
+        validateRoom(optionDTO.roomId());
         Option savedOption = optionRepository.save(option);
 
         log.info("Option created with ID: {}", savedOption.getId());
@@ -68,7 +71,7 @@ public class OptionServiceImpl implements OptionService {
             Department department = departmentService.getDepartmentById(optionDTO.departmentId());
             existingOption.setDepartment(department);
         }
-
+        validateRoom(optionDTO.roomId());
         // Update basic fields
         existingOption.setName(optionDTO.name());
         existingOption.setDescription(optionDTO.description());
@@ -129,6 +132,15 @@ public class OptionServiceImpl implements OptionService {
 //                .collect(Collectors.toList());
 //
 //    }
+
+    private void validateRoom(Long roomId) {
+        if (roomId != null) {
+            roomFeignClient.getRoomById(roomId).orElseThrow(() -> {
+                log.error("Room with ID '{}' not found", roomId);
+                return new EntityNotFoundException("Room not found with id: " + roomId);
+            });
+        }
+    }
 
 }
 

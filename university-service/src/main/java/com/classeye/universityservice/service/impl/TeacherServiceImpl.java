@@ -6,6 +6,7 @@ import com.classeye.universityservice.dto.response.TeacherModulesDTO;
 import com.classeye.universityservice.dto.response.TeacherResponseDTO;
 import com.classeye.universityservice.entity.Department;
 import com.classeye.universityservice.entity.Teacher;
+import com.classeye.universityservice.feign.AuthFeignClient;
 import com.classeye.universityservice.mapper.DepartmentMapper;
 import com.classeye.universityservice.mapper.TeacherMapper;
 import com.classeye.universityservice.repository.TeacherRepository;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+    private final AuthFeignClient authFeignClient;
     private final TeacherMapper teacherMapper;
     private final DepartmentMapper departmentMapper;
     private final DepartmentService departmentService;
@@ -45,7 +47,12 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher savedTeacher = teacherRepository.save(teacher);
 
         log.info("Teacher created with ID: {}", savedTeacher.getId());
-
+        authFeignClient.createUser( savedTeacher.getEmail(), "teacher");
+        log.info(
+                "User created with email: {} and role: {}",
+                savedTeacher.getEmail(),
+                "teacher"
+        );
         return new TeacherResponseDTO(
                 savedTeacher.getId(),
                 savedTeacher.getName(),

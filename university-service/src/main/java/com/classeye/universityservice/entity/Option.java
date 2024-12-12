@@ -19,11 +19,9 @@ public class Option extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
     private String description;
-
+    private Long RoomId;
     // Many Options can belong to one Department
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")

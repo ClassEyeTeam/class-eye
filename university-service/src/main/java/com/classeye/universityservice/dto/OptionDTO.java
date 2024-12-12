@@ -15,14 +15,9 @@ public record OptionDTO (
     String name,
     String description,
     Long departmentId,
+    Long roomId,
     List<Long> moduleOptionIds
 
 ){
 
-    public OptionDTO(long id, String name, String description) {
-        this(id, name, description, null, null);
-    }
-    public OptionDTO(String name, String description, Long departmentId) {
-        this(0, name, description, departmentId, null);
-    }
 }
