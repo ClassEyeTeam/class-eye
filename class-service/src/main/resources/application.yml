@@ -17,6 +17,33 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://cognito-idp.eu-west-3.amazonaws.com/eu-west-3_H1UTyevos
+          jwk-set-uri: https://cognito-idp.eu-west-3.amazonaws.com/eu-west-3_H1UTyevos/.well-known/jwks.json
+      client:
+        registration:
+          cognito:
+            client-id: 6pv9g6ad1b0fhfo06v8g9b0alm
+            client-secret: 1eudob0bpbieaus6q2edmd3qrahuj65ldd8562rccck6dtbhu4rd
+            scope:
+              - email
+              - openid
+              - phone
+            # Spring Security by default uses a redirect-uri in the format: {baseUrl}/login/oauth2/code/{registrationId}
+            # For example: http://localhost:8080/login/oauth2/code/cognito
+            # See more: https://docs.spring.io/spring-security/reference/servlet/oauth2/login/core.html#oauth2login-sample-redirect-uri
+  cognito:
+    user-pool-id: eu-west-3_H1UTyevos
+
+  aws:
+    access-key: AKIARWPFIFREPHL3JBPE
+    secret-key: 6j44hRrb+jSZIdMN7j9cxDydRJJL38XO2HcOKIXL
+    region: eu-west-3
+    cognito:
+      user-pool-id: eu-west-3_H1UTyevos
 server:
   port: 8083
 

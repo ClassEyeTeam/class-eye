@@ -1,22 +1,9 @@
 spring:
   application:
-    name: university-service
+    name: auth-service
+
   config:
     import: optional:configserver:${CONFIG_SERVICE_URL:http://localhost:8888}
-  datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/university}
-    username: ${SPRING_DATASOURCE_USERNAME:class}
-    password: ${SPRING_DATASOURCE_PASSWORD:class}
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-      logging:
-        sql: true
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
   security:
     oauth2:
       resourceserver:
@@ -35,17 +22,21 @@ spring:
             # Spring Security by default uses a redirect-uri in the format: {baseUrl}/login/oauth2/code/{registrationId}
             # For example: http://localhost:8080/login/oauth2/code/cognito
             # See more: https://docs.spring.io/spring-security/reference/servlet/oauth2/login/core.html#oauth2login-sample-redirect-uri
-  cognito:
-    user-pool-id: eu-west-3_H1UTyevos
-
-  aws:
-    access-key: AKIARWPFIFREPHL3JBPE
-    secret-key: 6j44hRrb+jSZIdMN7j9cxDydRJJL38XO2HcOKIXL
-    region: eu-west-3
-    cognito:
-      user-pool-id: eu-west-3_H1UTyevos
+  mail:
+    host: smtp.mailgun.org
+    port: 587
+    username: postmaster@sandboxef78bc798ab847fdbcb10955b9f9d821.mailgun.org
+    password: 7d190a5122c013a8d802230942c477a9-f55d7446-6171ad18
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    from: noreply@sandboxef78bc798ab847fdbcb10955b9f9d821.mailgun.org
 server:
-  port: 8081
+  port: 8085
 
 eureka:
   client:
@@ -61,3 +52,13 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
+
+cognito:
+  user-pool-id: eu-west-3_H1UTyevos
+
+aws:
+  access-key: AKIARWPFIFREPHL3JBPE
+  secret-key: 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
+  region: eu-west-3
+  cognito:
+    user-pool-id: eu-west-3_H1UTyevos
