@@ -4,10 +4,15 @@ spring:
   config:
     import: optional:configserver:${CONFIG_SERVICE_URL:http://localhost:8888}
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/university}
-    username: ${SPRING_DATASOURCE_USERNAME:class}
-    password: ${SPRING_DATASOURCE_PASSWORD:class}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://classeyedb.cxc6mki8uytc.eu-west-3.rds.amazonaws.com:5432/postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:classEye}
+    password: ${SPRING_DATASOURCE_PASSWORD:classEye1}
     driver-class-name: org.postgresql.Driver
+#    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/university}
+#    username: ${SPRING_DATASOURCE_USERNAME:class}
+#    password: ${SPRING_DATASOURCE_PASSWORD:class}
+#    driver-class-name: org.postgresql.Driver
+
   main:
     allow-bean-definition-overriding: true
   jpa:

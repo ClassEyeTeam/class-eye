@@ -23,10 +23,10 @@ spring:
             # For example: http://localhost:8080/login/oauth2/code/cognito
             # See more: https://docs.spring.io/spring-security/reference/servlet/oauth2/login/core.html#oauth2login-sample-redirect-uri
   mail:
-    host: smtp.mailgun.org
+    host: smtp.gmail.com
     port: 587
-    username: postmaster@sandboxef78bc798ab847fdbcb10955b9f9d821.mailgun.org
-    password: 7d190a5122c013a8d802230942c477a9-f55d7446-6171ad18
+    username: sejjari.soufian@gmail.com
+    password: nyjs reus bjbx drcu
     protocol: smtp
     properties:
       mail:
@@ -34,7 +34,6 @@ spring:
           auth: true
           starttls:
             enable: true
-    from: noreply@sandboxef78bc798ab847fdbcb10955b9f9d821.mailgun.org
 server:
   port: 8085
 
