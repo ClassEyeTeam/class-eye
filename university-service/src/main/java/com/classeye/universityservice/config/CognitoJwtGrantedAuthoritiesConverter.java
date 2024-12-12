@@ -9,7 +9,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.classeye.studentservice.util.Constants.AUTHORITY_PREFIX;
+import static com.classeye.universityservice.util.Constants.AUTHORITY_PREFIX;
+
 
 /**
  * @author sejja
