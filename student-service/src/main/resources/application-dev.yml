@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: student-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/university}
+    username: ${SPRING_DATASOURCE_USERNAME:class}
+    password: ${SPRING_DATASOURCE_PASSWORD:class}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false

@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: gateway-service
+  config:
+    import: optional:configserver:${CONFIG_SERVICE_URL:http://localhost:8888}
+  cloud:
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
+
+server:
+  port: 8088
+logging:
+  level:
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: DEBUG
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway, routes

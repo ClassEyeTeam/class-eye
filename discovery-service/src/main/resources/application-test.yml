@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: discovery-service
+  boot:
+    admin:
+      client:
+        enabled: false  # Disable boot admin client connection
+
+server:
+  port: 8761
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false  # Disable registration with Eureka

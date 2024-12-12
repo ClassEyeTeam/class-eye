@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: config-service
+  cloud:
+    config:
+      server:
+        git:
+          uri: "https://github.com/ClassEyeTeam/config-class-eye"
+          clone-on-start: true
+          default-label: main
+          username: "mohmmedsadok"
+          password: "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"
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
+server:
+  port: 8888
+
