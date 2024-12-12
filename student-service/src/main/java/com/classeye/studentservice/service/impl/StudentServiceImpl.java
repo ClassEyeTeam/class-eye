@@ -5,6 +5,7 @@ package com.classeye.studentservice.service.impl;
  **/
 
 
+import com.classeye.studentservice.feign.AuthFeignClient;
 import com.classeye.studentservice.feign.ModuleOptionFeignClient;
 import com.classeye.studentservice.dto.request.StudentRequestDTO;
 import com.classeye.studentservice.dto.response.AttendanceResponseDTO;
@@ -38,6 +39,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final ModuleOptionFeignClient moduleOptionFeignClient;
     private final OptionFeignClient optionFeignClient;
+    private final AuthFeignClient authFeignClient;
 
     private final StudentMapper studentMapper;
 
@@ -49,6 +51,8 @@ public class StudentServiceImpl implements StudentService {
             throw new DuplicateResourceException("Student with email " + studentRequestDTO.email() + " already exists!");
         }
         validateOption(studentRequestDTO.optionId());
+        // create cognito account for student
+        authFeignClient.createUser(studentRequestDTO.email(), "student");
 
         Student student = studentMapper.toEntity(studentRequestDTO);
         student.setOptionId(studentRequestDTO.optionId());
