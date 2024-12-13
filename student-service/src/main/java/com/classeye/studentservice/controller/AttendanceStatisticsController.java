@@ -2,6 +2,7 @@ package com.classeye.studentservice.controller;
 
 import com.classeye.studentservice.dto.response.dashboard.AttendanceStatisticsResponseDTO;
 import com.classeye.studentservice.dto.response.dashboard.ModuleStatisticsResponseDTO;
+import com.classeye.studentservice.dto.response.dashboard.OptionModuleStatisticsResponseDTO;
 import com.classeye.studentservice.dto.response.dashboard.OptionStatisticsResponseDTO;
 import com.classeye.studentservice.service.AttendanceStatisticsService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,11 @@ public class AttendanceStatisticsController {
     public List<OptionStatisticsResponseDTO> getOptionStatistics() {
         return attendanceStatisticsService.getOptionStatistics();
     }
+    @GetMapping("/statistics/options")
+    public List<OptionModuleStatisticsResponseDTO> getOptionStatistics(@RequestParam Long optionId) {
+        return attendanceStatisticsService.getOptionStatistics(optionId);
+    }
+
 
     @GetMapping("/statistics/modules")
     public List<ModuleStatisticsResponseDTO> getModuleStatistics(@RequestParam Long moduleOptionId) {

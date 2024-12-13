@@ -5,11 +5,12 @@ import java.util.List;
 /**
  * @author sejja
  **/
-public record OptionStatisticsResponseDTO(
+public record OptionModuleStatisticsResponseDTO(
         Long optionId,
         long totalSessions,
         long totalAttendances,
-        long presentCount
+        long presentCount,
+        List<ModuleStatisticsResponseDTO> moduleStatistics
 ) {
 
 

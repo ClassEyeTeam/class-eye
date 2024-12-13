@@ -2,6 +2,7 @@ package com.classeye.studentservice.service.impl;
 
 import com.classeye.studentservice.dto.response.dashboard.AttendanceStatisticsResponseDTO;
 import com.classeye.studentservice.dto.response.dashboard.ModuleStatisticsResponseDTO;
+import com.classeye.studentservice.dto.response.dashboard.OptionModuleStatisticsResponseDTO;
 import com.classeye.studentservice.dto.response.dashboard.OptionStatisticsResponseDTO;
 import com.classeye.studentservice.entity.Attendance;
 import com.classeye.studentservice.entity.AttendanceStatus;
@@ -70,6 +71,45 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
                             .filter(attendance -> attendance.getStatus() == AttendanceStatus.PRESENT)
                             .count();
                     return new OptionStatisticsResponseDTO(optionId, totalSessions, totalAttendances, presentCount);
+                })
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<OptionModuleStatisticsResponseDTO> getOptionStatistics(Long optionId) {
+        return sessionRepository.findByModuleOptionId(optionId).stream()
+                .collect(Collectors.groupingBy(Session::getModuleOptionId))
+                .entrySet().stream()
+                .map(entry -> {
+                    Long optionIdKey = entry.getKey();
+                    List<Session> sessions = entry.getValue();
+                    long totalSessions = sessions.size();
+                    long totalAttendances = sessions.stream()
+                            .flatMap(session -> session.getAttendances().stream())
+                            .count();
+                    long presentCount = sessions.stream()
+                            .flatMap(session -> session.getAttendances().stream())
+                            .filter(attendance -> attendance.getStatus() == AttendanceStatus.PRESENT)
+                            .count();
+
+                    // Collect module statistics for each option
+                    List<ModuleStatisticsResponseDTO> moduleStatistics = sessions.stream()
+                            .collect(Collectors.groupingBy(Session::getId))
+                            .entrySet().stream()
+                            .map(moduleEntry -> {
+                                Long moduleId = moduleEntry.getKey();
+                                List<Session> moduleSessions = moduleEntry.getValue();
+                                long moduleTotalAttendances = moduleSessions.stream()
+                                        .flatMap(session -> session.getAttendances().stream())
+                                        .count();
+                                long modulePresentCount = moduleSessions.stream()
+                                        .flatMap(session -> session.getAttendances().stream())
+                                        .filter(attendance -> attendance.getStatus() == AttendanceStatus.PRESENT)
+                                        .count();
+                                return new ModuleStatisticsResponseDTO(moduleId, moduleTotalAttendances, modulePresentCount);
+                            })
+                            .collect(Collectors.toList());
+
+                    return new OptionModuleStatisticsResponseDTO(optionIdKey, totalSessions, totalAttendances, presentCount, moduleStatistics);
                 })
                 .collect(Collectors.toList());
     }
