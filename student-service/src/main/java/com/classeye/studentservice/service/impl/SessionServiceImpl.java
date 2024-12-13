@@ -73,10 +73,17 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public Optional<SessionResponseDTO> getSessionById(Long id) {
+    public Optional<SessionResponseDTO> getSessionDtoById(Long id) {
         log.info("Fetching session with ID: {}", id);
         return sessionRepository.findById(id)
                 .map(sessionMapper::toDto);
+    }
+    @Override
+    public Session  getSessionById(Long id) {
+        log.info("Fetching session with ID: {}", id);
+        return sessionRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Session not found with ID: " + id)
+        );
     }
 
     @Override

@@ -7,6 +7,7 @@ package com.classeye.studentservice.service;
 
 import com.classeye.studentservice.dto.request.StudentRequestDTO;
 import com.classeye.studentservice.dto.response.StudentResponseDTO;
+import com.classeye.studentservice.entity.Student;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,9 @@ public interface StudentService {
 
     StudentResponseDTO saveStudent(StudentRequestDTO studentRequestDTO);
     StudentResponseDTO updateStudent(Long id,StudentRequestDTO studentRequestDTO);
-    Optional<StudentResponseDTO> getStudentById(Long id);
+    Optional<StudentResponseDTO> getStudentDtoById(Long id);
+    Student getStudentById(Long id);
+
     List<StudentResponseDTO> getAllStudents();
     void deleteStudent(Long id);
 

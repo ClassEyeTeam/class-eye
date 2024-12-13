@@ -42,7 +42,7 @@ public class SessionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SessionResponseDTO> getSessionById(@PathVariable Long id) {
-        Optional<SessionResponseDTO> session = sessionService.getSessionById(id);
+        Optional<SessionResponseDTO> session = sessionService.getSessionDtoById(id);
         return session.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

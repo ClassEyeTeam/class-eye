@@ -7,6 +7,8 @@ import com.classeye.studentservice.entity.AttendanceStatus;
 import com.classeye.studentservice.mapper.AttendanceMapper;
 import com.classeye.studentservice.repository.AttendanceRepository;
 import com.classeye.studentservice.service.AttendanceService;
+import com.classeye.studentservice.service.SessionService;
+import com.classeye.studentservice.service.StudentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +29,21 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
     private final AttendanceMapper attendanceMapper;
+    private final StudentService studentService;
+    private final SessionService sessionService;
 
     @Override
     public AttendanceResponseDTO saveAttendance(AttendanceRequestDTO attendanceRequestDTO) {
         log.info("Saving attendance for student with ID: {}", attendanceRequestDTO.studentId());
         Attendance attendance = attendanceMapper.toEntity(attendanceRequestDTO);
+        attendance.setStudent(studentService.getStudentById(attendanceRequestDTO.studentId()));
+        attendance.setSession(sessionService.getSessionById(attendanceRequestDTO.sessionId()));
         Attendance savedAttendance = attendanceRepository.save(attendance);
+        if(attendance.getStartTime() != null) {
+            log.info("Attendance saved for student ID: {}", savedAttendance.getStudent().getId());
+            attendance.setEndTime(attendance.getSession().getEndDateTime());
+        }
+
         log.info("Attendance saved for student ID: {}", savedAttendance.getStudent().getId());
         return attendanceMapper.toDto(savedAttendance);
     }

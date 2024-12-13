@@ -93,10 +93,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<StudentResponseDTO> getStudentById(Long id) {
+    public Optional<StudentResponseDTO> getStudentDtoById(Long id) {
         log.info("Fetching student with ID: {}", id);
         return studentRepository.findById(id)
                 .map(studentMapper::toDto);
+    }
+    @Override
+    public Student  getStudentById(Long id) {
+        log.info("Fetching student with ID: {}", id);
+        return studentRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Student not found with ID: " + id)
+        );
     }
 
     @Override
