@@ -52,6 +52,12 @@ public class SessionController {
         return ResponseEntity.ok(sessions);
     }
 
+    @GetMapping("/option/{optionId}")
+    public ResponseEntity<List<SessionResponseDTO>> getSessionsByOptionId(@PathVariable Long optionId) {
+        List<SessionResponseDTO> sessions = sessionService.findByOptionId(optionId);
+        return ResponseEntity.ok(sessions);
+    }
+
     @GetMapping("/student/{studentId}")
     public ResponseEntity<List<SessionResponseDTO>> getSessionsByStudentId(@PathVariable Long studentId) {
         List<SessionResponseDTO> sessions = sessionService.findByStudentId(studentId);

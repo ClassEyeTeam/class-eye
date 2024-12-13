@@ -22,5 +22,7 @@ public interface SessionService {
 
     // Custom Methods
     List<SessionResponseDTO> findByStudentId(Long studentId);
+
+    List<SessionResponseDTO> findByOptionId(Long optionId);
 }
 

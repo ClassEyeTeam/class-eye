@@ -5,6 +5,7 @@ package com.classeye.studentservice.service.impl;
  **/
 
 
+import com.classeye.studentservice.dto.ModuleOptionResponseDTO;
 import com.classeye.studentservice.dto.request.SessionRequestDTO;
 import com.classeye.studentservice.dto.response.SessionResponseDTO;
 import com.classeye.studentservice.entity.Session;
@@ -101,6 +102,18 @@ public class SessionServiceImpl implements SessionService {
                 .map(sessionMapper::toDto)
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<SessionResponseDTO> findByOptionId(Long optionId) {
+        log.info("Fetching sessions for option ID: {}", optionId);
+        List<ModuleOptionResponseDTO> options = moduleOptionFeignClient.getAllModulesInOption(optionId);
+        return options.stream()
+                .flatMap(option -> sessionRepository.findByModuleOptionId(option.id()).stream())
+                .map(sessionMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+
+
 
 
     private void validateModuleOption(Long optionId) {

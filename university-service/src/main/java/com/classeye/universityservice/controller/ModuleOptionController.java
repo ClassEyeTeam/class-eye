@@ -43,7 +43,7 @@ public class ModuleOptionController {
     }
 
     @GetMapping("/option/{id}")
-    public ResponseEntity<List<ModuleOptionResponseDTO>> getAllModulesInOption(@PathVariable Long id) {
+        public ResponseEntity<List<ModuleOptionResponseDTO>> getAllModulesInOption(@PathVariable Long id) {
         return ResponseEntity.ok(moduleOptionService.getAllModulesInOption(id));
     }
 
