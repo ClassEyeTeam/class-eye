@@ -14,4 +14,6 @@ import java.util.List;
 public interface SessionRepository extends JpaRepository<Session, Long> {
     // Find sessions by attendance status of a specific student
     List<Session> findByAttendances_Student_Id(Long studentId);
+
+    List<Session> findByEndDateTimeBefore(LocalDateTime now);
 }
