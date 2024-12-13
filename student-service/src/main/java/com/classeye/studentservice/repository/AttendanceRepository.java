@@ -7,13 +7,15 @@ package com.classeye.studentservice.repository;
 import com.classeye.studentservice.entity.Attendance;
 
 import com.classeye.studentservice.entity.AttendanceStatus;
+import com.classeye.studentservice.service.specification.AttendanceSpecification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
+public interface AttendanceRepository extends JpaRepository<Attendance, Long>, JpaSpecificationExecutor<Attendance> {
 
     // Find attendance records for a specific student
     List<Attendance> findByStudent_Id(Long studentId);

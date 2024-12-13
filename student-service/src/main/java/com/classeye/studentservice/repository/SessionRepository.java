@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -16,4 +17,6 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
     List<Session> findByAttendances_Student_Id(Long studentId);
 
     List<Session> findByEndDateTimeBefore(LocalDateTime now);
+
+    List<Session> findByModuleOptionId(Long moduleOptionId);
 }
