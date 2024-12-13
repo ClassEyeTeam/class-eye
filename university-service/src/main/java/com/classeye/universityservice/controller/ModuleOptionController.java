@@ -1,6 +1,5 @@
 package com.classeye.universityservice.controller;
 
-//import com.classeye.universityservice.dto.ModuleOptionDTO;
 import com.classeye.universityservice.dto.request.ModuleOptionRequestDTO;
 import com.classeye.universityservice.dto.response.ModuleOptionResponseDTO;
 import com.classeye.universityservice.service.ModuleOptionService;
@@ -41,6 +40,11 @@ public class ModuleOptionController {
     @GetMapping("/{id}")
     public ResponseEntity<ModuleOptionResponseDTO> getModuleOptionById(@PathVariable Long id) {
         return ResponseEntity.ok(moduleOptionService.getModuleOptionDtoById(id));
+    }
+
+    @GetMapping("/option/{id}")
+    public ResponseEntity<List<ModuleOptionResponseDTO>> getAllModulesInOption(@PathVariable Long id) {
+        return ResponseEntity.ok(moduleOptionService.getAllModulesInOption(id));
     }
 
     @GetMapping

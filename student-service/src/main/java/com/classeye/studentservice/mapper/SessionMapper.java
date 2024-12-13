@@ -14,7 +14,6 @@ import org.mapstruct.factory.Mappers;
 public interface SessionMapper {
 
     SessionMapper INSTANCE = Mappers.getMapper(SessionMapper.class);
-
     Session toEntity(SessionRequestDTO sessionRequestDTO);
     SessionResponseDTO toDto(Session session);
 }

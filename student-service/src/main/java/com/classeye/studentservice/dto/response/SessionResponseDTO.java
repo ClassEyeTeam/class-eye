@@ -8,7 +8,7 @@ import java.util.List;
 
 public record SessionResponseDTO(
         Long id,
-        Long optionId,
+        Long moduleOptionId,
         LocalDateTime startDateTime,
         LocalDateTime endDateTime,
         List<AttendanceResponseDTO> attendances

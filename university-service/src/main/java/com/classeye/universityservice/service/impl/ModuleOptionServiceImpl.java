@@ -54,7 +54,7 @@ public class ModuleOptionServiceImpl implements ModuleOptionService {
         moduleOption.setOption(option);
         moduleOption.setTeacher(teacher);
         ModuleOption savedModuleOption = moduleOptionRepository.save(moduleOption);
-        
+
         log.info("ModuleOption created with ID: {}", savedModuleOption.getId());
         return moduleOptionMapper.toDto(savedModuleOption);
     }
@@ -127,6 +127,17 @@ public class ModuleOptionServiceImpl implements ModuleOptionService {
                 .map(moduleOptionMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ModuleOptionResponseDTO> getAllModulesInOption(Long optionId) {
+        log.info("Fetching all ModuleOptions by Option ID: {}", optionId);
+        return moduleOptionRepository
+                .getModuleOptionByOptionId(optionId)
+                .stream()
+                .map(moduleOptionMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public List<ModuleOption> findAllById(List<Long> ids) {

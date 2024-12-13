@@ -18,15 +18,15 @@ public class ModuleOption extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne( optional = false) // Many ModuleOptions can belong to one Module
-    @JoinColumn(name = "module_id", nullable = false) // Defines the foreign key column
+    @ManyToOne( optional = false)
+    @JoinColumn(name = "module_id", nullable = false)
     private Module module;
 
-    @ManyToOne( optional = false) // Many ModuleOptions can belong to one Option
-    @JoinColumn(name = "option_id", nullable = false) // Defines the foreign key column
+    @ManyToOne( optional = false)
+    @JoinColumn(name = "option_id", nullable = false)
     private Option option;
 
-    @ManyToOne( optional = false) // Many ModuleOptions can belong to one Teacher
-    @JoinColumn(name = "teacher_id", nullable = false) // Defines the foreign key column
+    @ManyToOne( optional = false)
+    @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 }
