@@ -1,9 +1,6 @@
 package com.classeye.studentservice.service.impl;
 
-import com.classeye.studentservice.dto.response.dashboard.AttendanceStatisticsResponseDTO;
-import com.classeye.studentservice.dto.response.dashboard.ModuleStatisticsResponseDTO;
-import com.classeye.studentservice.dto.response.dashboard.OptionModuleStatisticsResponseDTO;
-import com.classeye.studentservice.dto.response.dashboard.OptionStatisticsResponseDTO;
+import com.classeye.studentservice.dto.response.dashboard.*;
 import com.classeye.studentservice.entity.Attendance;
 import com.classeye.studentservice.entity.AttendanceStatus;
 import com.classeye.studentservice.entity.Session;
@@ -18,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +27,7 @@ import java.util.stream.Collectors;
 public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsService {
     private final AttendanceRepository attendanceRepository;
     private final SessionRepository sessionRepository;
+
 
     @Override
     public AttendanceStatisticsResponseDTO getStatistics(Long studentId, Long optionId, LocalDateTime startDate, LocalDateTime endDate) {
@@ -51,7 +50,16 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
         long absentCount = attendances.stream().filter(a -> a.getStatus() == AttendanceStatus.ABSENT).count();
         long lateCount = attendances.stream().filter(a -> a.getStatus() == AttendanceStatus.RETARD).count();
 
-        return new AttendanceStatisticsResponseDTO(totalSessions, presentCount, absentCount, lateCount);
+        // Calculate presentPerDay
+        Map<LocalDateTime, Long> presentPerDayMap = attendances.stream()
+                .filter(a -> a.getStatus() == AttendanceStatus.PRESENT)
+                .collect(Collectors.groupingBy(Attendance::getStartTime, Collectors.counting()));
+
+        List<PresentDayDto> presentPerDay = presentPerDayMap.entrySet().stream()
+                .map(entry -> new PresentDayDto(entry.getKey(), entry.getValue(), 0))
+                .collect(Collectors.toList());
+
+        return new AttendanceStatisticsResponseDTO( totalSessions, presentCount, absentCount, lateCount,  presentPerDay);
     }
 
     @Override
