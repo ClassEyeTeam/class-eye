@@ -134,6 +134,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 Session session = sessionOpt.get();
                 Attendance attendance = attendanceRepository.findByStudent_IdAndSession_Id(studentId, session.getId());
                 if (attendance == null) {
+                    log.info("Recording attendance for student ID: {} in session ID: {}", studentId, session.getId());
                     Attendance newAttendance = new Attendance();
                     newAttendance.setStudent(student);
                     newAttendance.setSession(session);
