@@ -4,6 +4,7 @@ package com.classeye.studentservice.controller;
  * @author moham
  **/
 
+import com.classeye.studentservice.dto.FaceDetectionRequestDTO;
 import com.classeye.studentservice.dto.request.AttendanceRequestDTO;
 import com.classeye.studentservice.dto.response.AttendanceResponseDTO;
 import com.classeye.studentservice.entity.AttendanceStatus;
@@ -29,11 +30,10 @@ public class AttendanceController {
         AttendanceResponseDTO createdAttendance = attendanceService.saveAttendance(attendanceRequestDTO);
         return new ResponseEntity<>(createdAttendance, HttpStatus.CREATED);
     }
-
-    @PostMapping("/facedetection")
-    public ResponseEntity<AttendanceResponseDTO> studentAttendance(@Valid @RequestBody AttendanceRequestDTO attendanceRequestDTO) {
-        AttendanceResponseDTO createdAttendance = attendanceService.saveAttendance(attendanceRequestDTO);
-        return new ResponseEntity<>(createdAttendance, HttpStatus.CREATED);
+    @PostMapping("/face-detection")
+    public ResponseEntity<Void> handleFaceDetection(@RequestBody FaceDetectionRequestDTO faceDetectionRequestDTO) {
+        attendanceService.processFaceDetectionData(faceDetectionRequestDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -13,6 +13,13 @@ spring:
             allowedMethods: "*"
             allowedHeaders: "*"
             allowCredentials: true
+      routes:
+        - id: face-detection-service
+          uri: http://localhost:5000
+          predicates:
+              - Path=/api/face-detection/**
+          filters:
+              - RewritePath=/api/face-detection/(?<segment>.*), /$\{segment}
 
 eureka:
   client:

@@ -25,7 +25,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authz -> authz.requestMatchers("/public/**", "/management/health/**", "/login/**")
+                .authorizeHttpRequests(authz -> authz.requestMatchers("/public/**", "/management/health/**", "/attendances/face-detection")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

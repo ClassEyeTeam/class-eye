@@ -1,11 +1,17 @@
 package com.classeye.studentservice.service.impl;
 
+import com.classeye.studentservice.dto.FaceDetectionRequestDTO;
+import com.classeye.studentservice.dto.ModuleOptionResponseDTO;
 import com.classeye.studentservice.dto.request.AttendanceRequestDTO;
 import com.classeye.studentservice.dto.response.AttendanceResponseDTO;
 import com.classeye.studentservice.entity.Attendance;
 import com.classeye.studentservice.entity.AttendanceStatus;
+import com.classeye.studentservice.entity.Session;
+import com.classeye.studentservice.entity.Student;
+import com.classeye.studentservice.feign.ModuleOptionFeignClient;
 import com.classeye.studentservice.mapper.AttendanceMapper;
 import com.classeye.studentservice.repository.AttendanceRepository;
+import com.classeye.studentservice.repository.StudentRepository;
 import com.classeye.studentservice.service.AttendanceService;
 import com.classeye.studentservice.service.SessionService;
 import com.classeye.studentservice.service.StudentService;
@@ -16,7 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -29,14 +37,18 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
     private final AttendanceMapper attendanceMapper;
-    private final StudentService studentService;
+    private final StudentRepository studentRepository;
     private final SessionService sessionService;
+    private final ModuleOptionFeignClient moduleOptionFeignClient;
+
 
     @Override
     public AttendanceResponseDTO saveAttendance(AttendanceRequestDTO attendanceRequestDTO) {
         log.info("Saving attendance for student with ID: {}", attendanceRequestDTO.studentId());
         Attendance attendance = attendanceMapper.toEntity(attendanceRequestDTO);
-        attendance.setStudent(studentService.getStudentById(attendanceRequestDTO.studentId()));
+        attendance.setStudent(studentRepository.findById(attendanceRequestDTO.studentId())
+                .orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + attendanceRequestDTO.studentId())));
+
         attendance.setSession(sessionService.getSessionById(attendanceRequestDTO.sessionId()));
         Attendance savedAttendance = attendanceRepository.save(attendance);
         if(attendance.getStartTime() != null) {
@@ -104,5 +116,34 @@ public class AttendanceServiceImpl implements AttendanceService {
         log.info("Fetching attendances for student ID: {} and session ID: {}", studentId, sessionId);
         Attendance attendance = attendanceRepository.findByStudent_IdAndSession_Id(studentId, sessionId);
         return attendanceMapper.toDto(attendance);
+    }
+    @Override
+    public void processFaceDetectionData(FaceDetectionRequestDTO faceDetectionRequestDTO) {
+        Long studentId = faceDetectionRequestDTO.studentId();
+        LocalDateTime timestamp = faceDetectionRequestDTO.timestamp();
+
+        log.info("Processing face detection data for student ID: {}", studentId);
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
+
+        List<ModuleOptionResponseDTO> moduleOptionResponseDTO = moduleOptionFeignClient.getAllModulesInOption(student.getOptionId());
+        for (ModuleOptionResponseDTO moduleOption : moduleOptionResponseDTO) {
+            Optional<Session> sessionOpt = sessionService.findCurrentSessionForStudent(moduleOption.id(), timestamp);
+            if (sessionOpt.isPresent()) {
+                Session session = sessionOpt.get();
+                Attendance attendance = attendanceRepository.findByStudent_IdAndSession_Id(studentId, session.getId());
+                if (attendance == null) {
+                    Attendance newAttendance = new Attendance();
+                    newAttendance.setStudent(student);
+                    newAttendance.setSession(session);
+                    newAttendance.setStatus(AttendanceStatus.PRESENT);
+                    newAttendance.setStartTime(timestamp);
+                    newAttendance.setEndTime(session.getEndDateTime());
+                    attendanceRepository.save(newAttendance);
+                }
+                break; // Exit the loop once the session is found and attendance is recorded
+            }
+        }
     }
 }

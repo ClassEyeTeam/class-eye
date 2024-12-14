@@ -8,6 +8,7 @@ import com.classeye.studentservice.service.AttendanceStatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * @author sejja
  **/
-
+@RequestMapping("/dashboard")
 @RestController
 @RequiredArgsConstructor
 public class AttendanceStatisticsController {
@@ -33,10 +34,7 @@ public class AttendanceStatisticsController {
         return attendanceStatisticsService.getStatistics(studentId, optionId, startDate, endDate);
     }
 
-    @GetMapping("/statistics/options")
-    public List<OptionStatisticsResponseDTO> getOptionStatistics() {
-        return attendanceStatisticsService.getOptionStatistics();
-    }
+
     @GetMapping("/statistics/options")
     public List<OptionModuleStatisticsResponseDTO> getOptionStatistics(@RequestParam Long optionId) {
         return attendanceStatisticsService.getOptionStatistics(optionId);

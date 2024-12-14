@@ -26,5 +26,6 @@ public interface StudentService {
     List<StudentResponseDTO> findByLastName(String lastName);
     List<StudentResponseDTO> findBySessionId(Long sessionId);
     List<StudentResponseDTO> findByOptionId(Long optionId);
+
 }
 

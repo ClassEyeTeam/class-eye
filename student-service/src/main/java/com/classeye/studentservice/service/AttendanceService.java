@@ -4,6 +4,7 @@ package com.classeye.studentservice.service;
  * @author moham
  **/
 
+import com.classeye.studentservice.dto.FaceDetectionRequestDTO;
 import com.classeye.studentservice.dto.request.AttendanceRequestDTO;
 import com.classeye.studentservice.dto.response.AttendanceResponseDTO;
 import com.classeye.studentservice.entity.AttendanceStatus;
@@ -23,5 +24,7 @@ public interface AttendanceService {
     List<AttendanceResponseDTO> findBySessionId(Long sessionId);
     List<AttendanceResponseDTO> findByStatusAndStudentId(AttendanceStatus status, Long studentId);
     AttendanceResponseDTO findByStudentIdAndSessionId(Long studentId, Long sessionId);
+
+    void processFaceDetectionData(FaceDetectionRequestDTO faceDetectionRequestDTO);
 }
 

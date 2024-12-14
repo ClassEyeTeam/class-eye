@@ -7,6 +7,7 @@ import com.classeye.studentservice.dto.request.SessionRequestDTO;
 import com.classeye.studentservice.dto.response.SessionResponseDTO;
 import com.classeye.studentservice.entity.Session;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,5 +25,7 @@ public interface SessionService {
     List<SessionResponseDTO> findByStudentId(Long studentId);
 
     List<SessionResponseDTO> findByOptionId(Long optionId);
+    Optional<Session> findCurrentSessionForStudent(Long ModuleOptionId, LocalDateTime timestamp);
 }
+
 

@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -110,6 +111,12 @@ public class SessionServiceImpl implements SessionService {
                 .flatMap(option -> sessionRepository.findByModuleOptionId(option.id()).stream())
                 .map(sessionMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Session> findCurrentSessionForStudent(Long moduleOptionId, LocalDateTime timestamp) {
+        log.info("Fetching current session for student ID: {}", moduleOptionId);
+        return sessionRepository.findCurrentSessionForStudent(moduleOptionId, timestamp);
     }
 
 
