@@ -12,6 +12,6 @@ public class FeignConfig {
 
     @Bean
     public Request.Options requestOptions() {
-        return new Request.Options(5000, 10000); // Timeout (connect, read)
+        return new Request.Options(15000, 30000); // Timeout (connect, read)
     }
 }
