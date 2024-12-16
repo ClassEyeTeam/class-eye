@@ -63,7 +63,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + attendanceRequestDTO.studentId())));
         attendance.setSession(sessionService.getSessionById(attendanceRequestDTO.sessionId()));
         attendance.setStatus(attendanceRequestDTO.status());
-        attendance.setStartTime(attendance.getStartTime());
+        attendance.setStartTime(attendanceRequestDTO.startTime());
         Attendance savedAttendance = attendanceRepository.save(attendance);
 
         log.info("Attendance saved for student ID: {}", savedAttendance.getStudent().getId());
