@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -50,14 +51,21 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
         long presentCount = attendances.stream().filter(a -> a.getStatus() == AttendanceStatus.PRESENT).count();
         long absentCount = attendances.stream().filter(a -> a.getStatus() == AttendanceStatus.ABSENT).count();
 
-        // Calculate presentPerDay with null check
-        Map<LocalDateTime, Long> presentPerDayMap = attendances.stream()
-                .filter(a -> a.getStatus() == AttendanceStatus.PRESENT)
-                .filter(a -> Objects.nonNull(a.getStartTime())) // Ensure startTime is not null
-                .collect(Collectors.groupingBy(Attendance::getStartTime, Collectors.counting()));
+        // Calculate present and absent per day by grouping by the date part of createdAt
+        Map<LocalDate, Map<AttendanceStatus, Long>> attendancePerDayMap = attendances.stream()
+                .collect(Collectors.groupingBy(
+                        a -> a.getCreatedAt().toLocalDate(),
+                        Collectors.groupingBy(Attendance::getStatus, Collectors.counting())
+                ));
 
-        List<PresentDayDto> presentPerDay = presentPerDayMap.entrySet().stream()
-                .map(entry -> new PresentDayDto(entry.getKey(), entry.getValue(), 0))
+        List<PresentDayDto> presentPerDay = attendancePerDayMap.entrySet().stream()
+                .map(entry -> {
+                    LocalDate date = entry.getKey();
+                    Map<AttendanceStatus, Long> statusCountMap = entry.getValue();
+                    long present = statusCountMap.getOrDefault(AttendanceStatus.PRESENT, 0L);
+                    long absent = statusCountMap.getOrDefault(AttendanceStatus.ABSENT, 0L);
+                    return new PresentDayDto(date.atStartOfDay(), present, absent);
+                })
                 .collect(Collectors.toList());
 
         return new AttendanceStatisticsResponseDTO(totalSessions, presentCount, absentCount, presentPerDay);
