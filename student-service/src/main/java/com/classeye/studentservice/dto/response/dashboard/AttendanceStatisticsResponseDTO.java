@@ -9,6 +9,5 @@ public record AttendanceStatisticsResponseDTO(
         long totalSessions,
         long presentCount,
         long absentCount,
-        long lateCount,
         List<PresentDayDto> presentDays
 ) {}

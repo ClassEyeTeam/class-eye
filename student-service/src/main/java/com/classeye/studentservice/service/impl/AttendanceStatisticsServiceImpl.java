@@ -48,7 +48,6 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
         long totalSessions = attendances.size();
         long presentCount = attendances.stream().filter(a -> a.getStatus() == AttendanceStatus.PRESENT).count();
         long absentCount = attendances.stream().filter(a -> a.getStatus() == AttendanceStatus.ABSENT).count();
-        long lateCount = attendances.stream().filter(a -> a.getStatus() == AttendanceStatus.RETARD).count();
 
         // Calculate presentPerDay
         Map<LocalDateTime, Long> presentPerDayMap = attendances.stream()
@@ -59,7 +58,7 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
                 .map(entry -> new PresentDayDto(entry.getKey(), entry.getValue(), 0))
                 .collect(Collectors.toList());
 
-        return new AttendanceStatisticsResponseDTO( totalSessions, presentCount, absentCount, lateCount,  presentPerDay);
+        return new AttendanceStatisticsResponseDTO( totalSessions, presentCount, absentCount,  presentPerDay);
     }
 
     @Override

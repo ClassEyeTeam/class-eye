@@ -4,6 +4,7 @@ package com.classeye.studentservice.mapper;
  * @author moham
  **/
 import com.classeye.studentservice.dto.request.StudentRequestDTO;
+import com.classeye.studentservice.dto.response.StudentDTO;
 import com.classeye.studentservice.dto.response.StudentResponseDTO;
 import com.classeye.studentservice.entity.Student;
 import org.mapstruct.Mapper;
@@ -20,5 +21,7 @@ public interface StudentMapper {
 
     @Mapping(target = "attendanceResponseDTO", ignore = true)
     StudentResponseDTO toDto(Student student);
+
+    StudentDTO toDtoAttendance(Student student);
 }
 

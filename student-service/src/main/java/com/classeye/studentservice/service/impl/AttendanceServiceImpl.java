@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-
 @Service
 @Transactional
 @Slf4j
@@ -51,21 +50,36 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         attendance.setSession(sessionService.getSessionById(attendanceRequestDTO.sessionId()));
         Attendance savedAttendance = attendanceRepository.save(attendance);
-        if(attendance.getStartTime() != null) {
-            log.info("Attendance saved for student ID: {}", savedAttendance.getStudent().getId());
-            attendance.setEndTime(attendance.getSession().getEndDateTime());
-        }
 
         log.info("Attendance saved for student ID: {}", savedAttendance.getStudent().getId());
         return attendanceMapper.toDto(savedAttendance);
     }
 
     @Override
-    public AttendanceResponseDTO getAttendanceById(Long id) {
+    public AttendanceResponseDTO updateAttendance(Long id, AttendanceRequestDTO attendanceRequestDTO) {
+        log.info("Updating attendance for student with ID: {}", attendanceRequestDTO.studentId());
+        Attendance attendance = getAttendanceById(id);
+        attendance.setStudent(studentRepository.findById(attendanceRequestDTO.studentId())
+                .orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + attendanceRequestDTO.studentId())));
+        attendance.setSession(sessionService.getSessionById(attendanceRequestDTO.sessionId()));
+        attendance.setStatus(attendanceRequestDTO.status());
+        attendance.setStartTime(attendance.getStartTime());
+        Attendance savedAttendance = attendanceRepository.save(attendance);
+
+        log.info("Attendance saved for student ID: {}", savedAttendance.getStudent().getId());
+        return attendanceMapper.toDto(savedAttendance);
+    }
+
+    @Override
+    public AttendanceResponseDTO getAttendanceDtoById(Long id) {
+        return attendanceMapper.toDto(getAttendanceById(id));
+    }
+
+    @Override
+    public Attendance getAttendanceById(Long id) {
         log.info("Fetching attendance with ID: {}", id);
-        Attendance attendance = attendanceRepository.findById(id)
+        return attendanceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Attendance not found with ID: " + id));
-        return attendanceMapper.toDto(attendance);
     }
 
     @Override
@@ -98,6 +112,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public List<AttendanceResponseDTO> findBySessionId(Long sessionId) {
         log.info("Fetching attendances for session ID: {}", sessionId);
+        sessionService.getSessionById(sessionId);
         return attendanceRepository.findBySession_Id(sessionId).stream()
                 .map(attendanceMapper::toDto)
                 .collect(Collectors.toList());
@@ -117,6 +132,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         Attendance attendance = attendanceRepository.findByStudent_IdAndSession_Id(studentId, sessionId);
         return attendanceMapper.toDto(attendance);
     }
+
     @Override
     public void processFaceDetectionData(FaceDetectionRequestDTO faceDetectionRequestDTO) {
         Long studentId = faceDetectionRequestDTO.studentId();
@@ -140,7 +156,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                     newAttendance.setSession(session);
                     newAttendance.setStatus(AttendanceStatus.PRESENT);
                     newAttendance.setStartTime(timestamp);
-                    newAttendance.setEndTime(session.getEndDateTime());
                     attendanceRepository.save(newAttendance);
                 }
                 break; // Exit the loop once the session is found and attendance is recorded

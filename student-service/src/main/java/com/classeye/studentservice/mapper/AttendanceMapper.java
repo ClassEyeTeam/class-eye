@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = StudentMapper.class)
 public interface AttendanceMapper {
 
     AttendanceMapper INSTANCE = Mappers.getMapper(AttendanceMapper.class);
@@ -19,7 +19,7 @@ public interface AttendanceMapper {
     @Mapping(source = "sessionId", target = "session.id")
     Attendance toEntity(AttendanceRequestDTO attendanceRequestDTO);
 
-    @Mapping(source = "student.id", target = "studentId")
+    @Mapping(source = "student", target = "student")
     @Mapping(source = "session.id", target = "sessionId")
     AttendanceResponseDTO toDto(Attendance attendance);
 }
