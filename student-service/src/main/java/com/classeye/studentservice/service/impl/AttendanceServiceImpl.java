@@ -120,9 +120,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public void processFaceDetectionData(FaceDetectionRequestDTO faceDetectionRequestDTO) {
         Long studentId = faceDetectionRequestDTO.studentId();
-        LocalDateTime timestamp = faceDetectionRequestDTO.timestamp();
+        LocalDateTime timestamp = faceDetectionRequestDTO.timestamp().toLocalDateTime().plusHours(1);
 
-        log.info("Processing face detection data for student ID: {}", studentId);
+        log.info("Processing face detection data for student ID: {} and date {}", studentId, timestamp);
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + studentId));
@@ -131,6 +131,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         for (ModuleOptionResponseDTO moduleOption : moduleOptionResponseDTO) {
             Optional<Session> sessionOpt = sessionService.findCurrentSessionForStudent(moduleOption.id(), timestamp);
             if (sessionOpt.isPresent()) {
+                log.info("Session found for student ID: {} in module option ID: {}", studentId, moduleOption.id());
                 Session session = sessionOpt.get();
                 Attendance attendance = attendanceRepository.findByStudent_IdAndSession_Id(studentId, session.getId());
                 if (attendance == null) {

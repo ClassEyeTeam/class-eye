@@ -1,6 +1,7 @@
 package com.classeye.studentservice.dto;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * @author sejja
@@ -8,6 +9,6 @@ import java.time.LocalDateTime;
 public record FaceDetectionRequestDTO(
         Long studentId,
         double confidence,
-        LocalDateTime timestamp
+        OffsetDateTime timestamp
 ) {
 }
