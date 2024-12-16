@@ -18,7 +18,6 @@ public record AttendanceRequestDTO(
         @NotNull(message = "Session ID cannot be null")
         Long sessionId,
         LocalDateTime startTime,
-        LocalDateTime endTime,
 
         @NotNull(message = "Status cannot be null")
         AttendanceStatus status

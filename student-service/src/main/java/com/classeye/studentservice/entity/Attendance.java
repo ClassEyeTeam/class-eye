@@ -18,14 +18,11 @@ public class Attendance extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private AttendanceStatus status;
 
     @Column
     private LocalDateTime startTime;
 
-    @Column
-    private LocalDateTime endTime;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)

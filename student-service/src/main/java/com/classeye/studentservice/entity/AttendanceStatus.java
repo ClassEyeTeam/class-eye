@@ -6,6 +6,6 @@ package com.classeye.studentservice.entity;
 public enum AttendanceStatus  {
     PRESENT,
     ABSENT,
-    RETARD
+    NOT_RECORDED
 }
 

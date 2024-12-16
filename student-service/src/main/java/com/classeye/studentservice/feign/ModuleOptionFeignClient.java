@@ -15,7 +15,7 @@ import java.util.List;
 public interface ModuleOptionFeignClient {
 
     @GetMapping("/{id}")
-    ModuleOptionResponse getModuleOptionById(@PathVariable("id") Long id);
+    ModuleOptionResponseDTO getModuleOptionById(@PathVariable("id") Long id);
 
     @GetMapping("/option/{id}")
     List<ModuleOptionResponseDTO> getAllModulesInOption(@PathVariable("id") Long id);

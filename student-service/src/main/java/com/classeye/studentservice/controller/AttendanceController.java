@@ -30,6 +30,7 @@ public class AttendanceController {
         AttendanceResponseDTO createdAttendance = attendanceService.saveAttendance(attendanceRequestDTO);
         return new ResponseEntity<>(createdAttendance, HttpStatus.CREATED);
     }
+
     @PostMapping("/face-detection")
     public ResponseEntity<Void> handleFaceDetection(@RequestBody FaceDetectionRequestDTO faceDetectionRequestDTO) {
         attendanceService.processFaceDetectionData(faceDetectionRequestDTO);
@@ -38,8 +39,16 @@ public class AttendanceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AttendanceResponseDTO> getAttendanceById(@PathVariable Long id) {
-        AttendanceResponseDTO createdAttendance = attendanceService.getAttendanceById(id);
+        AttendanceResponseDTO createdAttendance = attendanceService.getAttendanceDtoById(id);
         return new ResponseEntity<>(createdAttendance, HttpStatus.CREATED);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AttendanceResponseDTO> updateAttendance(@PathVariable Long id, @Valid @RequestBody AttendanceRequestDTO attendanceRequestDTO) {
+
+        AttendanceResponseDTO updatedAttendance = attendanceService.updateAttendance(id, attendanceRequestDTO);
+        return new ResponseEntity<>(updatedAttendance, HttpStatus.CREATED);
     }
 
     @GetMapping
