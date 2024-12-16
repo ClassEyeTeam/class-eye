@@ -150,14 +150,11 @@ public class AttendanceServiceImpl implements AttendanceService {
                 log.info("Session found for student ID: {} in module option ID: {}", studentId, moduleOption.id());
                 Session session = sessionOpt.get();
                 Attendance attendance = attendanceRepository.findByStudent_IdAndSession_Id(studentId, session.getId());
-                if (attendance == null) {
+                if (attendance != null) {
                     log.info("Recording attendance for student ID: {} in session ID: {}", studentId, session.getId());
-                    Attendance newAttendance = new Attendance();
-                    newAttendance.setStudent(student);
-                    newAttendance.setSession(session);
-                    newAttendance.setStatus(AttendanceStatus.PRESENT);
-                    newAttendance.setStartTime(timestamp);
-                    attendanceRepository.save(newAttendance);
+                    attendance.setStatus(AttendanceStatus.PRESENT);
+                    attendance.setStartTime(timestamp);
+                    attendanceRepository.save(attendance);
                 }
                 break; // Exit the loop once the session is found and attendance is recorded
             }
