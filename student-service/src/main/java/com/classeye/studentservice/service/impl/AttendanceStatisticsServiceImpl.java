@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -49,18 +50,18 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
         long presentCount = attendances.stream().filter(a -> a.getStatus() == AttendanceStatus.PRESENT).count();
         long absentCount = attendances.stream().filter(a -> a.getStatus() == AttendanceStatus.ABSENT).count();
 
-        // Calculate presentPerDay
+        // Calculate presentPerDay with null check
         Map<LocalDateTime, Long> presentPerDayMap = attendances.stream()
                 .filter(a -> a.getStatus() == AttendanceStatus.PRESENT)
+                .filter(a -> Objects.nonNull(a.getStartTime())) // Ensure startTime is not null
                 .collect(Collectors.groupingBy(Attendance::getStartTime, Collectors.counting()));
 
         List<PresentDayDto> presentPerDay = presentPerDayMap.entrySet().stream()
                 .map(entry -> new PresentDayDto(entry.getKey(), entry.getValue(), 0))
                 .collect(Collectors.toList());
 
-        return new AttendanceStatisticsResponseDTO( totalSessions, presentCount, absentCount,  presentPerDay);
+        return new AttendanceStatisticsResponseDTO(totalSessions, presentCount, absentCount, presentPerDay);
     }
-
     @Override
     public List<OptionStatisticsResponseDTO> getOptionStatistics() {
         return sessionRepository.findAll().stream()
