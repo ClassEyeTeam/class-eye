@@ -1,4 +1,4 @@
-package com.classeye.studentservice.service.impl;
+package com.classeye.studentservice.service.schudler;
 
 import com.classeye.studentservice.entity.Attendance;
 import com.classeye.studentservice.entity.AttendanceStatus;
@@ -32,7 +32,7 @@ public class AttendanceSchedulerService {
         for (Session session : endedSessions) {
             List<Attendance> attendances = attendanceRepository.findBySession_Id(session.getId());
             for (Attendance attendance : attendances) {
-                if (attendance.getStatus() == null) {
+                if (attendance.getStatus() == AttendanceStatus.NOT_RECORDED) {
                     attendance.setStatus(AttendanceStatus.ABSENT);
                     attendanceRepository.save(attendance);
                     log.info("Marked student ID {} as absent for session ID {}", attendance.getStudent().getId(), session.getId());
