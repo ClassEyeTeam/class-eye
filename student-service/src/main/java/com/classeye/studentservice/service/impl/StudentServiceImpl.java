@@ -142,6 +142,7 @@ public class StudentServiceImpl implements StudentService {
                             student.getLastName(),
                             student.getEmail(),
                             student.getOptionId(),
+                            student.getFaceDetectionEnabled(),
                             attendanceResponseDTO
                     );
                 })
@@ -159,10 +160,22 @@ public class StudentServiceImpl implements StudentService {
                             student.getLastName(),
                             student.getEmail(),
                             student.getOptionId(),
+                            student.getFaceDetectionEnabled(),
                             null
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public StudentResponseDTO enableFaceDetection(Long id) {
+        log.info("Enabling face detection for student with ID: {}", id);
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + id));
+        student.setFaceDetectionEnabled(true);
+        Student updatedStudent = studentRepository.save(student);
+        log.info("Face detection enabled for student with ID: {}", id);
+        return studentMapper.toDto(updatedStudent);
     }
 
 

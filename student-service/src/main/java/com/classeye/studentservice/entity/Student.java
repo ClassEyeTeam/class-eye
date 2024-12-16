@@ -27,6 +27,9 @@ public class Student extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean faceDetectionEnabled;
+
     private Long optionId;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)

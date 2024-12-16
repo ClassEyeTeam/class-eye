@@ -13,6 +13,8 @@ public record StudentResponseDTO(
         String lastName,
         String email,
         Long optionId,
+
+        Boolean faceDetectionEnabled,
         AttendanceResponseDTO attendanceResponseDTO
 ) {
 }

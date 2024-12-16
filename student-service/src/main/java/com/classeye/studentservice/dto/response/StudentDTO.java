@@ -8,6 +8,7 @@ public record StudentDTO(
         String firstName,
         String lastName,
         String email,
+        Boolean faceDetectionEnabled,
         Long optionId
 ) {
 }

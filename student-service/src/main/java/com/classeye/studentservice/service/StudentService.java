@@ -27,5 +27,6 @@ public interface StudentService {
     List<StudentResponseDTO> findBySessionId(Long sessionId);
     List<StudentResponseDTO> findByOptionId(Long optionId);
 
+    StudentResponseDTO enableFaceDetection(Long id);
 }
 

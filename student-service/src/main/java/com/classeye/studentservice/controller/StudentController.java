@@ -46,6 +46,12 @@ public class StudentController {
         return student.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/face-detection/{id}")
+    public ResponseEntity<StudentResponseDTO> enableFaceDetection(@PathVariable Long id) {
+        StudentResponseDTO student = studentService.enableFaceDetection(id);
+        return ResponseEntity.ok(student);
+    }
+
     @GetMapping
     public ResponseEntity<List<StudentResponseDTO>> getAllStudents() {
         List<StudentResponseDTO> students = studentService.getAllStudents();
