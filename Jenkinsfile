@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SERVICES = 'admin-server discovery-service gateway-service config-service university-service'
+        SERVICES = 'admin-server discovery-service gateway-service auth-service config-service university-service '
     }
 
     stages {

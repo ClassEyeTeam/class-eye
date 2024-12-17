@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -57,19 +58,20 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
                         a -> a.getCreatedAt().toLocalDate(),
                         Collectors.groupingBy(Attendance::getStatus, Collectors.counting())
                 ));
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List<PresentDayDto> presentPerDay = attendancePerDayMap.entrySet().stream()
                 .map(entry -> {
                     LocalDate date = entry.getKey();
                     Map<AttendanceStatus, Long> statusCountMap = entry.getValue();
                     long present = statusCountMap.getOrDefault(AttendanceStatus.PRESENT, 0L);
                     long absent = statusCountMap.getOrDefault(AttendanceStatus.ABSENT, 0L);
-                    return new PresentDayDto(date.atStartOfDay(), present, absent);
+                    return new PresentDayDto(date.format(formatter), present, absent);
                 })
                 .collect(Collectors.toList());
 
         return new AttendanceStatisticsResponseDTO(totalSessions, presentCount, absentCount, presentPerDay);
     }
+
     @Override
     public List<OptionStatisticsResponseDTO> getOptionStatistics() {
         return sessionRepository.findAll().stream()
@@ -90,6 +92,7 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
                 })
                 .collect(Collectors.toList());
     }
+
     @Override
     public List<OptionModuleStatisticsResponseDTO> getOptionStatistics(Long optionId) {
         return sessionRepository.findByModuleOptionId(optionId).stream()

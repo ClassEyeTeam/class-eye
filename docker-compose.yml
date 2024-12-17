@@ -1,20 +1,6 @@
 version: '3.8'
 
 services:
-  university-db:
-    image: postgres:latest
-    container_name: university-db
-    environment:
-      POSTGRES_USER: class
-      POSTGRES_PASSWORD: class
-      POSTGRES_DB: university
-    ports:
-      - "5432:5432"
-    volumes:
-      - university-data:/var/lib/postgresql/data
-    networks:
-      - class-network
-
   discovery-service:
     build: ./discovery-service
     container_name: discovery-service
@@ -77,15 +63,32 @@ services:
     networks:
       - class-network
 
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - "8085:8085"
+    environment:
+      - CONFIG_SERVICE_URL=http://config-service:8888
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://admin-server:8070/actuator/health"]
+      interval: 10s
+      retries: 4
+    depends_on:
+      - gateway-service
+    networks:
+      - class-network
+
   university-service:
     build: ./university-service
     container_name: university-service
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://university-db:5432/university
-      - SPRING_DATASOURCE_USERNAME=class
-      - SPRING_DATASOURCE_PASSWORD=class
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://university-db:5432/university
+#      - SPRING_DATASOURCE_USERNAME=class
+#      - SPRING_DATASOURCE_PASSWORD=class
       - CONFIG_SERVICE_URL=http://config-service:8888
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
     healthcheck:
@@ -93,28 +96,6 @@ services:
       interval: 10s
       retries: 4
     depends_on:
-      - university-db
-      - gateway-service
-    networks:
-      - class-network
-
-  student-service:
-    build: ./student-service
-    container_name: student-service
-    ports:
-      - "8084:8084"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://university-db:5432/university
-      - SPRING_DATASOURCE_USERNAME=class
-      - SPRING_DATASOURCE_PASSWORD=class
-      - CONFIG_SERVICE_URL=http://config-service:8888
-      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://student-service:8084/actuator/health"]
-      interval: 10s
-      retries: 4
-    depends_on:
-      - university-db
       - gateway-service
     networks:
       - class-network
