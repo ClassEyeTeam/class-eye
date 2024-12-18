@@ -8,11 +8,6 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:classEye}
     password: ${SPRING_DATASOURCE_PASSWORD:classEye1}
     driver-class-name: org.postgresql.Driver
-#    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/university}
-#    username: ${SPRING_DATASOURCE_USERNAME:class}
-#    password: ${SPRING_DATASOURCE_PASSWORD:class}
-#    driver-class-name: org.postgresql.Driver
-
   main:
     allow-bean-definition-overriding: true
   jpa:

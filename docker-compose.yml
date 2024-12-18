@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   discovery-service:
     build: ./discovery-service
@@ -72,7 +70,7 @@ services:
       - CONFIG_SERVICE_URL=http://config-service:8888
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://admin-server:8070/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://auth-service:8085/actuator/health"]
       interval: 10s
       retries: 4
     depends_on:
@@ -93,6 +91,46 @@ services:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
     healthcheck:
       test: ["CMD", "curl", "-f", "http://university-service:8081/actuator/health"]
+      interval: 10s
+      retries: 4
+    depends_on:
+      - gateway-service
+    networks:
+      - class-network
+
+  student-service:
+    build: ./student-service
+    container_name: student-service
+    ports:
+      - "8082:8082"
+    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://university-db:5432/university
+#      - SPRING_DATASOURCE_USERNAME=class
+#      - SPRING_DATASOURCE_PASSWORD=class
+      - CONFIG_SERVICE_URL=http://config-service:8888
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://student-service:8082/actuator/health"]
+      interval: 10s
+      retries: 4
+    depends_on:
+      - gateway-service
+    networks:
+      - class-network
+
+  class-service:
+    build: ./class-service
+    container_name: class-service
+    ports:
+      - "8083:8083"
+    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://university-db:5432/university
+#      - SPRING_DATASOURCE_USERNAME=class
+#      - SPRING_DATASOURCE_PASSWORD=class
+      - CONFIG_SERVICE_URL=http://config-service:8888
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://class-service:8083/actuator/health"]
       interval: 10s
       retries: 4
     depends_on:
