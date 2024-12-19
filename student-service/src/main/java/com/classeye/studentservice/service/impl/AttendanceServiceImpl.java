@@ -59,11 +59,28 @@ public class AttendanceServiceImpl implements AttendanceService {
     public AttendanceResponseDTO updateAttendance(Long id, AttendanceRequestDTO attendanceRequestDTO) {
         log.info("Updating attendance for student with ID: {}", attendanceRequestDTO.studentId());
         Attendance attendance = getAttendanceById(id);
+        Session session = sessionService.getSessionById(attendanceRequestDTO.sessionId());
+
+        LocalDateTime studentPresentAt;
+
+//        if (attendanceRequestDTO.startTime().isAfter(session.getStartDateTime())
+//                && attendanceRequestDTO.startTime().isBefore(session.getEndDateTime())) {
+//            // Attendance is within the session duration
+//            studentPresentAt = attendanceRequestDTO.startTime();
+//        } else {
+            // Attendance is outside the session duration
+            studentPresentAt = session.getStartDateTime();
+//        }
+
+
+
         attendance.setStudent(studentRepository.findById(attendanceRequestDTO.studentId())
                 .orElseThrow(() -> new EntityNotFoundException("Student not found with ID: " + attendanceRequestDTO.studentId())));
-        attendance.setSession(sessionService.getSessionById(attendanceRequestDTO.sessionId()));
+
+//        attendance.setSession(sessionService.getSessionById(attendanceRequestDTO.sessionId()));
+
         attendance.setStatus(attendanceRequestDTO.status());
-        attendance.setStartTime(attendanceRequestDTO.startTime());
+        attendance.setStartTime(studentPresentAt);
         Attendance savedAttendance = attendanceRepository.save(attendance);
 
         log.info("Attendance saved for student ID: {}", savedAttendance.getStudent().getId());
@@ -113,9 +130,12 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<AttendanceResponseDTO> findBySessionId(Long sessionId) {
         log.info("Fetching attendances for session ID: {}", sessionId);
         sessionService.getSessionById(sessionId);
-        return attendanceRepository.findBySession_Id(sessionId).stream()
+
+        List<AttendanceResponseDTO> responseDTOS = attendanceRepository.findBySession_Id(sessionId).stream()
                 .map(attendanceMapper::toDto)
                 .collect(Collectors.toList());
+        log.info("the size is {}",responseDTOS.size());
+        return responseDTOS;
     }
 
     @Override
