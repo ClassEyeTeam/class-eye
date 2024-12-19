@@ -55,10 +55,12 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         // Calculate present and absent per day by grouping by the date part of createdAt
         Map<String, Map<AttendanceStatus, Long>> attendancePerDayMap = attendances.stream()
+                .filter(a -> a.getStartTime() != null) // Filter out null start times
                 .collect(Collectors.groupingBy(
                         a -> a.getStartTime().format(formatter),
                         Collectors.groupingBy(Attendance::getStatus, Collectors.counting())
                 ));
+
 
         List<PresentDayDto> presentPerDay = attendancePerDayMap.entrySet().stream()
                 .map(entry -> {
@@ -67,7 +69,7 @@ public class AttendanceStatisticsServiceImpl implements AttendanceStatisticsServ
                     long absent = statusCountMap.getOrDefault(AttendanceStatus.ABSENT, 0L);
                     return new PresentDayDto(entry.getKey(), present, absent);
                 })
-                .sorted((a,b) -> a.date().compareTo(b.date()))
+                .sorted((a, b) -> a.date().compareTo(b.date()))
                 .collect(Collectors.toList());
 
         return new AttendanceStatisticsResponseDTO(totalSessions, presentCount, absentCount, presentPerDay);

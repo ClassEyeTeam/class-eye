@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author sejja
  **/
-@FeignClient(name = "module-option-service", url = "http://localhost:8088/UNIVERSITY-SERVICE/module-options")
+@FeignClient(name = "module-option-service", url = "http://gateway-service:8088/UNIVERSITY-SERVICE/module-options")
 public interface ModuleOptionFeignClient {
 
     @GetMapping("/{id}")

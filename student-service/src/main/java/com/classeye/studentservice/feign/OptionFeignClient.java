@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * @author sejja
  **/
-@FeignClient(name = "module-option-service", url = "http://localhost:8088/UNIVERSITY-SERVICE/options", fallback = OptionFeignClientFallback.class)
+@FeignClient(name = "module-option-service", url = "http://gateway-service:8088/UNIVERSITY-SERVICE/options", fallback = OptionFeignClientFallback.class)
 
 public interface OptionFeignClient {
     @GetMapping("/{id}")
