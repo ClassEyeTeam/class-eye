@@ -81,7 +81,7 @@ services:
     networks:
       - class-network
     depends_on:
-      gateway-service:
+      discovery-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8085/actuator/health"]
@@ -103,7 +103,7 @@ services:
     networks:
       - class-network
     depends_on:
-      auth-service:
+      discovery-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
@@ -125,7 +125,7 @@ services:
     networks:
       - class-network
     depends_on:
-      university-service:
+      discovery-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
@@ -145,7 +145,7 @@ services:
     networks:
       - class-network
     depends_on:
-      gateway-service:
+      discovery-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
