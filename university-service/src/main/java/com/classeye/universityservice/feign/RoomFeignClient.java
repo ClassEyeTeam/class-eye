@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * @author sejja
  **/
-@FeignClient(name = "class-service", url = "http://localhost:8088/CLASS-SERVICE/rooms", fallback = FeignClientFallBack.class)
+@FeignClient(name = "class-service", url = "${class.service.url}/room", fallback = FeignClientFallBack.class)
 
 public interface RoomFeignClient {
     @GetMapping("/{id}")

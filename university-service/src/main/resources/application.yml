@@ -48,7 +48,12 @@ eureka:
   client:
     service-url:
       defaultZone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
-
+class:
+  service:
+    url: ${CLASS_SERVICE_URL:http://localhost:8088/CLASS-SERVICE}
+auth:
+    service:
+        url: ${AUTH_SERVICE_URL:http://localhost:8088/AUTH-SERVICE}
 logging:
   level:
     org:

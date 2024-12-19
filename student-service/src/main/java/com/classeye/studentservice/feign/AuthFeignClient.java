@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * @author sejja
  **/
-@FeignClient(name = "auth-service", url = "http://localhost:8088/AUTH-SERVICE")
+@FeignClient(name = "auth-service", url = "${auth.service.url}")
 public interface AuthFeignClient {
 
     @PostMapping("/create-user")
