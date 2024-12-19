@@ -24,7 +24,7 @@ public class AttendanceSchedulerService {
     private final SessionRepository sessionRepository;
     private final AttendanceRepository attendanceRepository;
 
-    @Scheduled(cron = "0 0 * * * ?") // Runs every hour
+    @Scheduled(cron = "0 */2 * * * ?") // Runs every 2 minutes
     public void markAbsentStudents() {
         log.info("Running scheduled task to mark absent students");
         List<Session> endedSessions = sessionRepository.findByEndDateTimeBefore(LocalDateTime.now());
@@ -34,7 +34,9 @@ public class AttendanceSchedulerService {
             for (Attendance attendance : attendances) {
                 if (attendance.getStatus() == AttendanceStatus.NOT_RECORDED) {
                     attendance.setStatus(AttendanceStatus.ABSENT);
+                    attendance.setStartTime(session.getStartDateTime());
                     attendanceRepository.save(attendance);
+
                     log.info("Marked student ID {} as absent for session ID {}", attendance.getStudent().getId(), session.getId());
                 }
             }

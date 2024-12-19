@@ -1,59 +1,55 @@
 services:
+  # Infrastructure Services
+#  mongo:
+#    image: mongo:4.4.6
+#    container_name: mongo
+#    ports:
+#      - "27017:27017"
+#    volumes:
+#      - mongo-data:/data/db
+#    networks:
+#      - class-network
+#    healthcheck:
+#      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+#      interval: 10s
+#      timeout: 10s
+#      retries: 3
+
   discovery-service:
+    image: discovery-service:latest
     build: ./discovery-service
     container_name: discovery-service
     ports:
       - "8761:8761"
+    networks:
+      - class-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://discovery-service:8761/actuator/health"]
-      interval: 5s
-      retries: 4
-    networks:
-      - class-network
-  web:
-    image: facedeetection:latest
-    build: .
-    ports:
-      - "5000:5000"
-    environment:
-      - AWS_REGION=eu-west-3
-      - COGNITO_USER_POOL_ID=eu-west-3_H1UTyevos
-      - COGNITO_CLIENT_ID=6pv9g6ad1b0fhfo06v8g9b0alm
-      - COGNITO_CLIENT_SECRET=1eudob0bpbieaus6q2edmd3qrahuj65ldd8562rccck6dtbhu4rd
-      - MONGO_URI=mongodb://mongo:27017
-      - EUREKA_SERVER=http://discovery-service:8761/eureka
-      - STUDENT_SERVICE_URL=http://student-service:8082
-
-    networks:
-      - class-network
-    depends_on:
-      - mongo
-  mongo:
-    image: mongo:4.4.6
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - class-network
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   config-service:
+    image: config-service:latest
     build: ./config-service
     container_name: config-service
     ports:
       - "8888:8888"
     environment:
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://config-service:8888/actuator/health"]
-      interval: 5s
-      retries: 4
-    depends_on:
-      - discovery-service
     networks:
       - class-network
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   gateway-service:
+    image: gateway-service:latest
     build: ./gateway-service
     container_name: gateway-service
     ports:
@@ -61,33 +57,20 @@ services:
     environment:
       - CONFIG_SERVICE_URL=http://config-service:8888
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://gateway-service:8088/actuator/health"]
-      interval: 5s
-      retries: 4
-    depends_on:
-      - config-service
     networks:
       - class-network
-
-  admin-server:
-    build: ./admin-server
-    container_name: admin-server
-    ports:
-      - "8070:8070"
-    environment:
-      - CONFIG_SERVICE_URL=http://config-service:8888
-      - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
+    depends_on:
+      config-service:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://admin-server:8070/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8088/actuator/health"]
       interval: 10s
-      retries: 4
-    depends_on:
-      - gateway-service
-    networks:
-      - class-network
+      timeout: 5s
+      retries: 3
 
+  # Core Services
   auth-service:
+    image: auth-service:latest
     build: ./auth-service
     container_name: auth-service
     ports:
@@ -95,83 +78,105 @@ services:
     environment:
       - CONFIG_SERVICE_URL=http://config-service:8888
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://auth-service:8085/actuator/health"]
-      interval: 10s
-      retries: 4
-    depends_on:
-      - gateway-service
     networks:
       - class-network
+    depends_on:
+      gateway-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   university-service:
+    image: university-service:latest
     build: ./university-service
     container_name: university-service
     ports:
       - "8081:8081"
     environment:
-      #      - SPRING_DATASOURCE_URL=jdbc:postgresql://university-db:5432/university
-      #      - SPRING_DATASOURCE_USERNAME=class
-      #      - SPRING_DATASOURCE_PASSWORD=class
       - CONFIG_SERVICE_URL=http://config-service:8888
       - CLASS_SERVICE_URL=http://class-service:8083
       - AUTH_SERVICE_URL=http://auth-service:8085
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://university-service:8081/actuator/health"]
-      interval: 10s
-      retries: 4
-    depends_on:
-      - gateway-service
     networks:
       - class-network
+    depends_on:
+      auth-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   student-service:
+    image: student-service:latest
     build: ./student-service
     container_name: student-service
     ports:
       - "8082:8082"
     environment:
-      #      - SPRING_DATASOURCE_URL=jdbc:postgresql://university-db:5432/university
-      #      - SPRING_DATASOURCE_USERNAME=class
-      #      - SPRING_DATASOURCE_PASSWORD=class
       - CONFIG_SERVICE_URL=http://config-service:8888
       - UNIVERSITY_SERVICE_URL=http://university-service:8081
       - AUTH_SERVICE_URL=http://auth-service:8085
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://student-service:8082/actuator/health"]
-      interval: 10s
-      retries: 4
-    depends_on:
-      - gateway-service
     networks:
       - class-network
+    depends_on:
+      university-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   class-service:
+    image: class-service:latest
     build: ./class-service
     container_name: class-service
     ports:
       - "8083:8083"
     environment:
-      #      - SPRING_DATASOURCE_URL=jdbc:postgresql://university-db:5432/university
-      #      - SPRING_DATASOURCE_USERNAME=class
-      #      - SPRING_DATASOURCE_PASSWORD=class
       - CONFIG_SERVICE_URL=http://config-service:8888
       - DISCOVERY_SERVICE_URL=http://discovery-service:8761/eureka
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://class-service:8083/actuator/health"]
-      interval: 10s
-      retries: 4
-    depends_on:
-      - gateway-service
     networks:
       - class-network
+    depends_on:
+      gateway-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+#  web:
+#    image: facedeetection:latest
+#    build: .
+#    ports:
+#      - "5000:5000"
+#    environment:
+#      - AWS_REGION=eu-west-3
+#      - COGNITO_USER_POOL_ID=eu-west-3_H1UTyevos
+#      - COGNITO_CLIENT_ID=6pv9g6ad1b0fhfo06v8g9b0alm
+#      - COGNITO_CLIENT_SECRET=1eudob0bpbieaus6q2edmd3qrahuj65ldd8562rccck6dtbhu4rd
+#      - MONGO_URI=mongodb://mongo:27017
+#      - EUREKA_SERVER=http://discovery-service:8761/eureka
+#      - STUDENT_SERVICE_URL=http://student-service:8082
+#    networks:
+#      - class-network
+#    depends_on:
+#      mongo:
+#        condition: service_healthy
+#      student-service:
+#        condition: service_healthy
 
 networks:
   class-network:
     driver: bridge
 
 volumes:
-  university-data:
   mongo-data:
